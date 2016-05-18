@@ -7,7 +7,7 @@ class SignHost
 	public $AppKey;
 	public $ApiKey;
 	public $SharedSecret;
-	
+
 	function __construct($apiUrl, $appName, $appKey, $apiKey, $sharedSecret = null)
 	{
 		$this->ApiUrl = $apiUrl;
@@ -16,7 +16,7 @@ class SignHost
 		$this->ApiKey = $apiKey;
 		$this->SharedSecret = $sharedSecret;
 	}
-	
+
 	public function CreateTransaction($transaction) {
 		$ch = curl_init($this->ApiUrl. "/api/transaction");
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -29,7 +29,7 @@ class SignHost
 		$responseJson = curl_exec($ch);
 		return json_decode($responseJson);
 	}
-	
+
 	public function UploadFileContent($fileId, $filePath) {
 		$fh = fopen($filePath, 'r');
 		$ch = curl_init($this->ApiUrl. "/api/file/". $fileId);
@@ -48,7 +48,7 @@ class SignHost
 		fclose($fh);
 		return $response;
 	}
-	
+
 	public function ValidateChecksum($masterTransactionId, $fileId, $status, $checksum) {
 		return sha1($masterTransactionId. "|". $fileId. "|". $status. "|". $this->SharedSecret) == $checksum;
 	}
@@ -64,7 +64,8 @@ class Transaction
 	public $SendEmailNotifications;
 	public $SignRequestMode;
 	public $DaysToExpire;
-	
+	public $Context; // Context must be a array or object.
+
 	function __construct(
 			$fileName,
 			$seal = 1,
@@ -72,7 +73,8 @@ class Transaction
 			$postbackUrl = null,
 			$sendEmailNotifications = true,
 			$signRequestMode = 2,
-			$daysToExpire = 30)
+			$daysToExpire = 30,
+			$context = null)
 	{
 		$this->File = new File();
 		$this->File->Name = $fileName;
@@ -83,8 +85,9 @@ class Transaction
 		$this->SendEmailNotifications = $sendEmailNotifications;
 		$this->SignRequestMode = $signRequestMode;
 		$this->DaysToExpire = $daysToExpire;
+		$this->Context = $context;
 	}
-	
+
 	public function AddSigner(
 			$email,
 			$mobile = null,
@@ -102,7 +105,8 @@ class Transaction
 			$scribbleNameFixed = true,
 			$reference = null,
 			$returnUrl = null,
-			$daysToRemind = 15)
+			$daysToRemind = 15,
+			$context = null)
 	{
 		$signer = new  Signer();
 		$signer->Email = $email;
@@ -122,15 +126,17 @@ class Transaction
 		$signer->Reference = $reference;
 		$signer->ReturnUrl = $returnUrl;
 		$signer->DaysToRemind = $daysToRemind;
+		$signer->Context = $context;
 		$this->Signers[] = $signer;
 	}
-	
+
 	public function AddReceiver(
 			$name,
 			$email,
 			$message,
 			$language = null,
-			$reference = null)
+			$reference = null,
+			$context = null)
 	{
 		$receiver = new Receiver();
 		$receiver->Name = $name;
@@ -138,6 +144,7 @@ class Transaction
 		$receiver->Language = $language;
 		$receiver->Message = $message;
 		$receiver->Reference = $reference;
+		$receiver->Context = $context;
 		$this->Receivers[] = $receiver;
 	}
 }
@@ -166,6 +173,7 @@ class Signer
 	public $Reference;
 	public $ReturnUrl;
 	public $DaysToRemind;
+	public $Context; // Context must be a array or object.
 }
 
 class Receiver
@@ -175,6 +183,7 @@ class Receiver
 	public $Message;
 	public $Language;
 	public $Reference;
+	public $Context; // Context must be a array or object.
 }
 
 class AccessToken
@@ -182,7 +191,7 @@ class AccessToken
 	public $AccessToken;
 	public $ExpiresIn;
 	public $Username;
-	
+
 	function __construct($accessToken, $expiresIn, $username) {
 		$this->AccessToken = $accessToken;
 		$this->ExpiresIn = $expiresIn;
