@@ -23,9 +23,7 @@ class SignHost
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($transaction));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Application: APPKey ". $this->AppName. " ". $this->AppKey, "Authorization: APIKey ". $this->ApiKey));
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,0);
 		$responseJson = curl_exec($ch);
 		return json_decode($responseJson);
 	}
@@ -38,10 +36,8 @@ class SignHost
 		curl_setopt($ch, CURLOPT_INFILESIZE , filesize($filePath));
 		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/pdf", "Application: APPKey ". $this->AppName. " ". $this->AppKey, "Authorization: APIKey ". $this->ApiKey));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);		
 		curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,0);
 
 		$response = curl_exec($ch);
 
