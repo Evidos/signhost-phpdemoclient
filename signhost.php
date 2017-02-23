@@ -2,40 +2,61 @@
 
 class SignHost
 {
-	public $ApiUrl;
-	public $AppName;
+	const API_URL = "https://api.signhost.com/api/";
+
 	public $AppKey;
 	public $ApiKey;
 	public $SharedSecret;
 
-	function __construct($apiUrl, $appName, $appKey, $apiKey, $sharedSecret = null)
+	function __construct($appKey, $apiKey, $sharedSecret = null)
 	{
-		$this->ApiUrl = $apiUrl;
-		$this->AppName = $appName;
 		$this->AppKey = $appKey;
 		$this->ApiKey = $apiKey;
 		$this->SharedSecret = $sharedSecret;
 	}
 
 	public function CreateTransaction($transaction) {
-		$ch = curl_init($this->ApiUrl. "/api/transaction");
+		$ch = curl_init(self::API_URL . "transaction");
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($transaction));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Application: APPKey ". $this->AppName. " ". $this->AppKey, "Authorization: APIKey ". $this->ApiKey));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Application: APPKey " . $this->AppKey, "Authorization: APIKey " . $this->ApiKey));
 		curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 		$responseJson = curl_exec($ch);
 		return json_decode($responseJson);
 	}
 
-	public function UploadFileContent($fileId, $filePath) {
+	public function GetTransaction($transactionId) {
+		$ch = curl_init(self::API_URL . "transaction/" . $transactionId);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Application: APPKey " . $this->AppKey, "Authorization: APIKey " . $this->ApiKey));
+		curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+		$responseJson = curl_exec($ch);
+		return json_decode($responseJson);
+	}
+
+	public function DeleteTransaction($transactionId) {
+	    $ch = curl_init(self::API_URL . "transaction/" . $transactionId);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Application: APPKey " . $this->AppKey, "Authorization: APIKey " . $this->ApiKey));
+		curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+		$responseJson = curl_exec($ch);
+		return json_decode($responseJson);
+	}
+
+	public function StartTransaction() {
+		
+	}
+
+	public function AddOrReplaceFile($transactionId, $fileId, $filePath) {
 		$fh = fopen($filePath, 'r');
-		$ch = curl_init($this->ApiUrl. "/api/file/". $fileId);
+		$ch = curl_init(self::API_URL . "transaction" . $transactionId . "file" . $fileId);
 		curl_setopt($ch, CURLOPT_PUT, 1);
 		curl_setopt($ch, CURLOPT_INFILE , $fh);
 		curl_setopt($ch, CURLOPT_INFILESIZE , filesize($filePath));
 		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/pdf", "Application: APPKey ". $this->AppName. " ". $this->AppKey, "Authorization: APIKey ". $this->ApiKey));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/pdf", "Application: APPKey " . $this->AppKey, "Authorization: APIKey " . $this->ApiKey));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);		
 		curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 
@@ -45,154 +66,162 @@ class SignHost
 		return $response;
 	}
 
+	public function AddOrReplaceMetadata() {
+		// To be implemented
+	}
+
+	public function GetReceipt() {
+		// To be implemented
+	}
+
+	public function GetDocument() {
+		// To be implemented
+	}
+
 	public function ValidateChecksum($masterTransactionId, $fileId, $status, $checksum) {
-		return sha1($masterTransactionId. "|". $fileId. "|". $status. "|". $this->SharedSecret) == $checksum;
+		return sha1($masterTransactionId . "|" . $fileId . "|" . $status . "|" . $this->SharedSecret) == $checksum;
 	}
 }
 
 class Transaction
 {
-	public $File;
-	public $Seal;
-	public $Signers;
-	public $Reference;
-	public $PostbackUrl;
-	public $SendEmailNotifications;
-	public $SignRequestMode;
-	public $DaysToExpire;
-	public $Context; // Context must be a array or object.
-
-	function __construct(
-			$fileName,
-			$seal = 1,
-			$reference = null,
-			$postbackUrl = null,
-			$sendEmailNotifications = true,
-			$signRequestMode = 2,
-			$daysToExpire = 30,
-			$context = null)
-	{
-		$this->File = new File();
-		$this->File->Name = $fileName;
-		$this->Seal = $seal;
-		$this->Signers = array();
-		$this->Reference = $reference;
-		$this->PostbackUrl = $postbackUrl;
-		$this->SendEmailNotifications = $sendEmailNotifications;
-		$this->SignRequestMode = $signRequestMode;
-		$this->DaysToExpire = $daysToExpire;
-		$this->Context = $context;
-	}
-
-	public function AddSigner(
-			$email,
-			$mobile = null,
-			$iban = null,
-			$requireScribble = true,
-			$requireScribbleName = false, // If a scribble is not required, do we at least need the signers name?
-			$requireEmailVerification = true,
-			$requireSmsVerification = true,
-			$requireIdealVerification = true,
-			$sendSignRequest = true,
-			$sendSignConfirmation = true,
-			$signRequestMessage = null,
-			$language = null,
-			$scribbleName = null,
-			$scribbleNameFixed = true,
-			$reference = null,
-			$returnUrl = null,
-			$daysToRemind = 15,
-			$context = null)
-	{
-		$signer = new  Signer();
-		$signer->Email = $email;
-		$signer->Mobile = $mobile;
-		$signer->Iban = $iban;
-		$signer->RequireScribble = $requireScribble;
-		$signer->RequireScribbleName = $requireScribbleName;
-		$signer->RequireEmailVerification = $requireEmailVerification;
-		$signer->RequireSmsVerification = $requireSmsVerification;
-		$signer->RequireIdealVerification = $requireIdealVerification;
-		$signer->SendSignRequest = $sendSignRequest;
-		$signer->SendSignConfirmation = $sendSignConfirmation;
-		$signer->SignRequestMessage = $signRequestMessage;
-		$signer->Language = $language;
-		$signer->ScribbleName = $scribbleName;
-		$signer->ScribbleNameFixed = $scribbleNameFixed;
-		$signer->Reference = $reference;
-		$signer->ReturnUrl = $returnUrl;
-		$signer->DaysToRemind = $daysToRemind;
-		$signer->Context = $context;
-		$this->Signers[] = $signer;
-	}
-
-	public function AddReceiver(
-			$name,
-			$email,
-			$message,
-			$language = null,
-			$reference = null,
-			$context = null)
-	{
-		$receiver = new Receiver();
-		$receiver->Name = $name;
-		$receiver->Email = $email;
-		$receiver->Language = $language;
-		$receiver->Message = $message;
-		$receiver->Reference = $reference;
-		$receiver->Context = $context;
-		$this->Receivers[] = $receiver;
-	}
-}
-
-class File
-{
-	public $Name;
+	public $Id; // String
+	public $Files; // Map of <String,FileEntry>
+	public $Seal; // Boolean
+	public $Signers; // Array of Signer
+	public $Receivers; // Array of Receiver
+	public $Reference; // String
+	public $PostbackUrl; // String
+	public $SignRequestMode; // Integer
+	public $DaysToExpire; // Integer
+	public $SendEmailNotifications; // Boolean
+	public $Status; // Integer (enum)
+	public $Context; // Any object
 }
 
 class Signer
 {
-	public $Email;
-	public $Mobile;
-	public $Iban;
-	public $RequireScribble;
-	public $RequireScribbleName;
-	public $RequireEmailVerification;
-	public $RequireSmsVerification;
-	public $RequireIdealVerification;
-	public $SendSignRequest;
-	public $SendSignConfirmation;
-	public $SignRequestMessage;
-	public $Language;
-	public $ScribbleName;
-	public $ScribbleNameFixed;
-	public $Reference;
-	public $ReturnUrl;
-	public $DaysToRemind;
-	public $Context; // Context must be a array or object.
+	public $Id; // String
+	public $Email; // String
+	public $Mobile; // String
+	public $BSN; // String
+	public $RequireScribble; // Boolean
+	public $RequireSmsVerification; // Boolean
+	public $RequireDigidVerification; // Boolean
+	public $RequireKennisnetVerification; // Boolean
+	public $RequireSurfnetVerification; // Boolean
+	public $Verifications; // Array of Verification
+	public $SendSignRequest; // Boolean
+	public $SendSignRequestMessage; // String
+	public $SendSignConfirmation; // Boolean
+	public $Language; // String (enum)
+	public $ScribbleName; // String
+	public $ScribbleNameFixed; // Boolean
+	public $DaysToRemind; // Integer
+	public $Expires; // String
+	public $Reference; // String
+	public $ReturnUrl; // String
+	public $Activities; // Array of Activity
+	public $Context; // Any object
 }
 
 class Receiver
 {
-	public $Name;
-	public $Email;
-	public $Message;
-	public $Language;
-	public $Reference;
-	public $Context; // Context must be a array or object.
+	public $Name; // String
+	public $Email; // String
+	public $Language; // String (enum)
+	public $Message; // String
+	public $Reference; // String
+	public $Activities; // Array of Activity
+	public $Context; // Any object
 }
 
-class AccessToken
+class Verification
 {
-	public $AccessToken;
-	public $ExpiresIn;
-	public $Username;
+	public $Type; // String (enum)
 
-	function __construct($accessToken, $expiresIn, $username) {
-		$this->AccessToken = $accessToken;
-		$this->ExpiresIn = $expiresIn;
-		$this->Username = $username;
+	function __construct($type) {
+		$this->Type = $type;
 	}
 }
 
-?>
+class iDEAL extends Verification
+{
+	public $Iban; // String
+	public $AccountHolderName; // String
+	public $AccountHolderCity; // String
+
+	function __construct($type, $iban, $accountHolderName, $accountHolderCity) {
+		parent::__construct($type);
+		
+		$this->Iban = $iban;
+		$this->AccountHolderName = $accountHolderName;
+		$this->AccountHolderCity = $accountHolderCity;
+	}
+}
+
+class iDIN extends Verification
+{
+	public $AccountHolderName; // String
+	public $AccountHolderAddress1; // String
+	public $AccountHolderAddress2; // String
+	public $AccountHolderDateOfBirth; // String
+
+	function __construct(
+		$type,
+		$accountHolderName,
+		$accountHolderAddress1,
+		$accountHolderAddress2,
+		$accountHolderDateOfBirth) {
+		parent::__construct($type);
+		
+		$this->AccountHolderName = $accountHolderName;
+		$this->AccountHolderAddress1 = $accountHolderAddress1;
+		$this->AccountHolderAddress2 = $accountHolderAddress2;
+		$this->AccountHolderDateOfBirth = $accountHolderDateOfBirth;
+	}
+}
+
+class FileEntry
+{
+	public $Link; // Array of Link
+	public $DisplayName; // String
+}
+
+class Link
+{
+	public $Rel; // String (enum)
+	public $Type; // String
+	public $Link; // String
+}
+
+class FileMetaData
+{
+	public $DisplayName; // String
+	public $Signers; // Map of <String,FormSets>
+	public $FormSets; // Map of <String,Map of <String,FormSetField>>
+}
+
+class FormSets
+{
+	public $FormSets; // Array of String
+}
+
+class FormSetField
+{
+	public $Type; // String (enum)
+	public $Location; // Location
+}
+
+class Location
+{
+	public $Search; // String
+        public $Occurence; // Integer
+        public $Top; // Integer
+        public $Right; // Integer
+        public $Bottom; // Integer
+        public $Left; // Integer
+        public $Width; // Integer
+        public $Height; // Integer
+        public $PageNumber; // Integer
+}
