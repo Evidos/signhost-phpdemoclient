@@ -324,7 +324,7 @@ class Activity {
     public $Id; // String
     public $Code; // Integer (enum)
     public $Info; // String
-    public $CreateDateTime; // String
+    public $CreatedDateTime; // String
 
 }
 
