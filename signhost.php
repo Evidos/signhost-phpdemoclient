@@ -293,29 +293,46 @@ class Verification {
 
 }
 
-class iDEAL extends Verification {
+class IdealVerification extends Verification implements JsonSerializable {
 
     public $Iban; // String
     public $AccountHolderName; // String
     public $AccountHolderCity; // String
 
-    function __construct($type, $iban = null) {
-	parent::__construct($type);
+    function __construct($iban = null) {
+	parent::__construct("iDeal");
 	$this->Iban = $iban;
     }
 
+	function jsonSerialize() {
+		return array(
+			"Type" => $this->Type,
+			"Iban" => $this->Iban,
+			"AccountHolderName" => $this->AccountHolderName,
+			"AccountHolderCity" => $this->AccountHolderCity);
+	}
+
 }
 
-class iDIN extends Verification {
+class IdinVerification extends Verification implements JsonSerializable {
 
     public $AccountHolderName; // String
     public $AccountHolderAddress1; // String
     public $AccountHolderAddress2; // String
     public $AccountHolderDateOfBirth; // String
 
-    function __construct($type) {
-	parent::__construct($type);
+    function __construct() {
+	parent::__construct("iDIN");
     }
+
+	function jsonSerialize() {
+		return array(
+			"Type" => $this.Type,
+			"AccountHolderName" => $this.AccountHolderName,
+			"AccountHolderAddress1" => $this.AccountHolderAddress1,
+			"AccountHolderAddress2" => $this.AccountHolderAddress2,
+			"AccountHolderDataOfBirth" => $this.AccountHolderDateOfBirth);
+	}
 
 }
 
