@@ -19,7 +19,6 @@ class SignHost {
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($transaction));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
@@ -33,7 +32,6 @@ class SignHost {
     public function GetTransaction($transactionId) {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
@@ -48,7 +46,6 @@ class SignHost {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
@@ -63,7 +60,6 @@ class SignHost {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId."/start");
 	curl_setopt($ch, CURLOPT_PUT, 1);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
@@ -82,7 +78,6 @@ class SignHost {
 	curl_setopt($ch, CURLOPT_INFILE, $fh);
 	curl_setopt($ch, CURLOPT_INFILESIZE, filesize($filePath));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	    "Content-Type: application/pdf",
 	    "Application: APPKey ".$this->AppKey,
@@ -99,7 +94,6 @@ class SignHost {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId."/file/".$fileId);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($metadata));
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	    "Content-Type: application/json",
@@ -114,7 +108,6 @@ class SignHost {
     public function GetReceipt($transactionId) {
 	$ch = curl_init(self::API_URL."/file/receipt/".$transactionId);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
@@ -129,7 +122,6 @@ class SignHost {
     public function GetDocument($transactionId, $fileId) {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId."/file/".$fileId);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
