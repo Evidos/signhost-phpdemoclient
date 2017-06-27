@@ -27,7 +27,12 @@ class SignHost {
 	));
 
 	$responseJson = curl_exec($ch);
-	return json_decode($responseJson);
+	$response = json_decode($responseJson);
+	if (property_exists($response, 'Message')) {
+		throw new Exception($response->{'Message'});
+	}
+
+	return $response;
     }
 
     public function GetTransaction($transactionId) {
@@ -41,7 +46,12 @@ class SignHost {
 	));
 
 	$responseJson = curl_exec($ch);
-	return json_decode($responseJson);
+	$response = json_decode($responseJson);
+	if (property_exists($response, 'Message')) {
+		throw new Exception($response->{'Message'});
+	}
+
+	return $response;
     }
 
     public function DeleteTransaction($transactionId) {
@@ -56,6 +66,14 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+
+	if (is_string($response) && IsJson($response)) {
+		$errorModel = json_decode($response);
+		if (property_exists($errorModel, 'Message')) {
+			throw new Exception($errorModel->{'Message'});
+		}
+	}
+
 	return $response;
     }
 
@@ -71,7 +89,12 @@ class SignHost {
 	));
 
 	$responseJson = curl_exec($ch);
-	return json_decode($responseJson);
+	$response = json_decode($responseJson);
+	if (property_exists($response, 'Message')) {
+		throw new Exception($response->{'Message'});
+	}
+
+	return $response;
     }
 
     public function AddOrReplaceFile($transactionId, $fileId, $filePath) {
@@ -92,6 +115,14 @@ class SignHost {
 
 	$response = curl_exec($ch);
 	fclose($fh);
+
+	if (is_string($response) && IsJson($response)) {
+		$errorModel = json_decode($response);
+		if (property_exists($errorModel, 'Message')) {
+			throw new Exception($errorModel->{'Message'});
+		}
+	}
+
 	return $response;
     }
 
@@ -108,6 +139,14 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+
+	if (is_string($response) && IsJson($response)) {
+		$errorModel = json_decode($response);
+		if (property_exists($errorModel, 'Message')) {
+			throw new Exception($errorModel->{'Message'});
+		}
+	}
+
 	return $response;
     }
 
@@ -122,6 +161,14 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+
+	if (is_string($response) && IsJson($response)) {
+		$errorModel = json_decode($response);
+		if (property_exists($errorModel, 'Message')) {
+			throw new Exception($errorModel->{'Message'});
+		}
+	}
+
 	return $response;	
 	// Returns binary stream
     }
@@ -137,6 +184,14 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+
+	if (is_string($response) && IsJson($response)) {
+		$errorModel = json_decode($response);
+		if (property_exists($errorModel, 'Message')) {
+			throw new Exception($errorModel->{'Message'});
+		}
+	}
+
 	return $response;
 	// Returns binary stream
     }
@@ -144,6 +199,11 @@ class SignHost {
     public function ValidateChecksum($masterTransactionId, $fileId, $status, $checksum) {
 	return sha1($masterTransactionId."|".$fileId."|".$status."|".$this->SharedSecret) == $checksum;
     }
+
+	private function IsJson($string) {
+		json_decode($string);
+		return json_last_error() == JSON_ERROR_NONE;
+	}
 
 }
 
