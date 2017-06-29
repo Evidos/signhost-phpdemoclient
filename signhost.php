@@ -27,6 +27,8 @@ class SignHost {
 	));
 
 	$responseJson = curl_exec($ch);
+	curl_close($ch);
+
 	$response = json_decode($responseJson);
 	if (property_exists($response, 'Message')) {
 		throw new Exception($response->{'Message'});
@@ -46,6 +48,8 @@ class SignHost {
 	));
 
 	$responseJson = curl_exec($ch);
+	curl_close($ch);
+
 	$response = json_decode($responseJson);
 	if (property_exists($response, 'Message')) {
 		throw new Exception($response->{'Message'});
@@ -66,6 +70,7 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+	curl_close($ch);
 
 	if (is_string($response) && IsJson($response)) {
 		$errorModel = json_decode($response);
@@ -89,6 +94,8 @@ class SignHost {
 	));
 
 	$responseJson = curl_exec($ch);
+	curl_close($ch);
+
 	$response = json_decode($responseJson);
 	if (property_exists($response, 'Message')) {
 		throw new Exception($response->{'Message'});
@@ -114,6 +121,7 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+	curl_close($ch);
 	fclose($fh);
 
 	if (is_string($response) && IsJson($response)) {
@@ -139,6 +147,7 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+	curl_close($ch);
 
 	if (is_string($response) && IsJson($response)) {
 		$errorModel = json_decode($response);
@@ -161,6 +170,7 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+	curl_close($ch);
 
 	if (is_string($response) && IsJson($response)) {
 		$errorModel = json_decode($response);
@@ -184,6 +194,7 @@ class SignHost {
 	));
 
 	$response = curl_exec($ch);
+	curl_close($ch);
 
 	if (is_string($response) && IsJson($response)) {
 		$errorModel = json_decode($response);
