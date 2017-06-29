@@ -4,9 +4,20 @@ class SignHost {
 
     const API_URL = "https://api.signhost.com/api";
 
-    public $AppKey;
-    public $ApiKey;
-    public $SharedSecret;
+	/**
+	 * @var string
+	 */
+	public $AppKey;
+
+	/**
+	 * @var string
+	 */
+	public $ApiKey;
+
+	/**
+	 * @var string
+	 */
+	public $SharedSecret;
 
     function __construct($appKey, $apiKey, $sharedSecret = null) {
 	$this->AppKey = $appKey;
@@ -141,18 +152,65 @@ class SignHost {
 
 class Transaction {
 
-    public $Id; // String
-    public $Files; // Map of <String,FileEntry>
-    public $Seal; // Boolean
-    public $Signers; // Array of Signer
-    public $Receivers; // Array of Receiver
-    public $Reference; // String
-    public $PostbackUrl; // String
-    public $SignRequestMode; // Integer
-    public $DaysToExpire; // Integer
-    public $SendEmailNotifications; // Boolean
-    public $Status; // Integer (enum)
-    public $Context; // Any object
+	/**
+	 * @var string
+	 */
+	public $Id;
+
+	/**
+	 * @var <string,FileEntry>[]
+	 */
+	public $Files;
+
+	/**
+	 * @var bool
+	 */
+	public $Seal;
+
+	/**
+	 * @var Signer[]
+	 */
+	public $Signers;
+
+	/**
+	 * @var Receiver[]
+	 */
+	public $Receivers;
+
+	/**
+	 * @var string
+	 */
+	public $Reference;
+
+	/**
+	 * @var string
+	 */
+	public $PostbackUrl;
+
+	/**
+	 * @var integer
+	 */
+	public $SignRequestMode;
+
+	/**
+	 * @var integer
+	 */
+	public $DaysToExpire;
+
+	/**
+	 * @var bool
+	 */
+	public $SendEmailNotifications;
+
+	/**
+	 * @var integer
+	 */
+	public $Status;
+
+	/**
+	 * @var object
+	 */
+	public $Context;
 
     function __construct(
 	    $seal = false,
@@ -179,46 +237,91 @@ class Transaction {
 
 class Signer {
 
-    public $Id; // String
-    public $Email; // String
-    public $Mobile; // String
-    public $BSN; // String
-    public $RequireScribble; // Boolean
-    public $RequireSmsVerification; // Boolean
-    public $RequireDigidVerification; // Boolean
-    public $RequireKennisnetVerification; // Boolean
-    public $RequireSurfnetVerification; // Boolean
-    public $Verifications; // Array of Verification
-    public $SendSignRequest; // Boolean
-    public $SignRequestMessage; // String
-    public $SendSignConfirmation; // Boolean
-    public $Language; // String (enum)
-    public $ScribbleName; // String
-    public $ScribbleNameFixed; // Boolean
-    public $DaysToRemind; // Integer
-    public $Expires; // String
-    public $Reference; // String
-    public $ReturnUrl; // String
-    public $Activities; // Array of Activity
-    public $Context; // Any object
+	/**
+	 * @var string
+	 */
+	public $Id;
+
+	/**
+	 * @var string
+	 */
+	public $Email;
+
+	/**
+	 * @var string
+	 */
+	public $Mobile;
+
+	/**
+	 * @var string
+	 */
+	public $BSN;
+
+	/**
+	 * @var Verification[]
+	 */
+	public $Verifications;
+
+	/**
+	 * @var bool
+	 */
+	public $SendSignRequest;
+
+	/**
+	 * @var string
+	 */
+	public $SignRequestMessage;
+
+	/**
+	 * @var bool
+	 */
+	public $SendSignConfirmation;
+
+	/**
+	 * @var string
+	 */
+	public $Language;
+
+	/**
+	 * @var integer
+	 */
+	public $DaysToRemind;
+
+	/**
+	 * @var string
+	 */
+	public $Expires;
+
+	/**
+	 * @var string
+	 */
+	public $Reference;
+
+	/**
+	 * @var string
+	 */
+	public $ReturnUrl;
+
+	/**
+	 * @var Activity[]
+	 */
+	public $Activities;
+
+	/**
+	 * @var object
+	 */
+	public $Context;
 
     function __construct(
 	    $email,
 	    $id = null,
 	    $mobile = null,
 	    $bsn = null,
-	    $requireScribble = false,
-	    $requireSmsVerification = false,
-	    $requireDigidVerification = false,
-	    $requireKennisnetVerification = false,
-	    $requireSurfnetVerification = false,
 	    $verifications = array(),
 	    $sendSignRequest = false,
 	    $signRequestMessage = null,
 	    $sendSignConfirmation = null,
 	    $language = "nl-NL",
-	    $scribbleName = null,
-	    $scribbleNameFixed = false,
 	    $daysToRemind = 7,
 	    $expires = null,
 	    $reference = null,
@@ -228,18 +331,11 @@ class Signer {
 	$this->Email = $email;
 	$this->Mobile = $mobile;
 	$this->BSN = $bsn;
-	$this->RequireScribble = $requireScribble;
-	$this->RequireSmsVerification = $requireSmsVerification;
-	$this->RequireDigidVerification = $requireDigidVerification;
-	$this->RequireKennisnetVerification = $requireKennisnetVerification;
-	$this->RequireSurfnetVerification = $requireSurfnetVerification;
 	$this->Verifications = $verifications;
 	$this->SendSignRequest = $sendSignRequest;
 	$this->SendSignRequestMessage = $signRequestMessage;
 	$this->SendSignConfirmation = $sendSignConfirmation;
 	$this->Language = $language;
-	$this->ScribbleName = $scribbleName;
-	$this->ScribbleNameFixed = $scribbleNameFixed;
 	$this->DaysToRemind = $daysToRemind;
 	$this->Expires = $expires;
 	$this->Reference = $reference;
@@ -251,12 +347,35 @@ class Signer {
 
 class Receiver {
 
-    public $Name; // String
-    public $Email; // String
-    public $Language; // String (enum)
-    public $Message; // String
-    public $Reference; // String
-    public $Context; // Any object
+	/**
+	 * @var string
+	 */
+	public $Name;
+
+	/**
+	 * @var string
+	 */
+	public $Email;
+
+	/**
+	 * @var string
+	 */
+	public $Language;
+
+	/**
+	 * @var string
+	 */
+	public $Message;
+
+	/**
+	 * @var string
+	 */
+	public $Reference;
+
+	/**
+	 * @var object
+	 */
+	public $Context;
 
     function __construct(
 	    $name,
@@ -277,7 +396,10 @@ class Receiver {
 
 class Verification {
 
-    public $Type; // String (enum)
+	/**
+	 * @var string
+	 */
+	public $Type;
 
     function __construct($type) {
 	$this->Type = $type;
@@ -287,9 +409,20 @@ class Verification {
 
 class IdealVerification extends Verification implements JsonSerializable {
 
-    public $Iban; // String
-    public $AccountHolderName; // String
-    public $AccountHolderCity; // String
+	/**
+	 * @var string
+	 */
+	public $Iban;
+
+	/**
+	 * @var string
+	 */
+	public $AccountHolderName;
+
+	/**
+	 * @var string
+	 */
+	public $AccountHolderCity;
 
     function __construct($iban = null) {
 	parent::__construct("iDeal");
@@ -308,10 +441,25 @@ class IdealVerification extends Verification implements JsonSerializable {
 
 class IdinVerification extends Verification implements JsonSerializable {
 
-    public $AccountHolderName; // String
-    public $AccountHolderAddress1; // String
-    public $AccountHolderAddress2; // String
-    public $AccountHolderDateOfBirth; // String
+	/**
+	 * @var string
+	 */
+	public $AccountHolderName;
+
+	/**
+	 * @var string
+	 */
+	public $AccountHolderAddress1;
+
+	/**
+	 * @var string
+	 */
+	public $AccountHolderAddress2;
+
+	/**
+	 * @var string
+	 */
+	public $AccountHolderDateOfBirth;
 
     function __construct() {
 	parent::__construct("iDIN");
@@ -330,7 +478,10 @@ class IdinVerification extends Verification implements JsonSerializable {
 
 class DigidVerification extends Verification implements JsonSerializable {
 
-	public $Bsn; // String
+	/**
+	 * @var string
+	 */
+	public $Bsn;
 
 	function __construct($bsn = null) {
 		parent::__construct("DigiD");
@@ -371,9 +522,20 @@ class SurfnetVerification extends Verification implements JsonSerializable {
 
 class ScribbleVerification extends Verification implements JsonSerializable {
 
-	public $RequireHandsignature; // Bool
-	public $ScribbleNameFixed; // Bool
-	public $ScribbleName; // String
+	/**
+	 * @var bool
+	 */
+	public $RequireHandsignature;
+
+	/**
+	 * @var bool
+	 */
+	public $ScribbleNameFixed;
+
+	/**
+	 * @var string
+	 */
+	public $ScribbleName;
 
 	function __construct($requireHandsignature, $scribbleNameFixed = null, $scribbleName = null) {
 		parent::__construct("Scribble");
@@ -394,7 +556,10 @@ class ScribbleVerification extends Verification implements JsonSerializable {
 
 class PhoneNumberVerification extends Verification implements JsonSerializable {
 
-	public $Number; // String
+	/**
+	 * @var string
+	 */
+	public $Number;
 
 	function __construct($number) {
 		parent::__construct("PhoneNumber");
@@ -423,6 +588,9 @@ class ConsentVerification extends Verification implements JsonSerializable {
 
 class EherkenningVerification extends Verification implements JsonSerializable {
 
+	/**
+	 * @var string
+	 */
 	public $EntityConcernIdKvkNr;
 
 	function __construct($entityConcernIdKvkNr = null) {
@@ -440,35 +608,87 @@ class EherkenningVerification extends Verification implements JsonSerializable {
 
 class Activity {
 
-    public $Id; // String
-    public $Code; // Integer (enum)
-    public $Info; // String
-    public $CreatedDateTime; // String
+	/**
+	 * @var string
+	 */
+	public $Id;
+
+	/**
+	 * @var integer
+	 */
+	public $Code;
+
+	/**
+	 * @var string
+	 */
+	public $Info;
+
+	/**
+	 * @var string
+	 */
+	public $CreatedDateTime;
 
 }
 
 class FileEntry {
 
-    public $Links; // Array of Link
-    public $DisplayName; // String
+	/**
+	 * @var Link[]
+	 */
+	public $Links;
+
+	/**
+	 * @var string
+	 */
+	public $DisplayName;
 
 }
 
 class Link {
 
-    public $Rel; // String (enum)
-    public $Type; // String
-    public $Link; // String
+	/**
+	 * @var string
+	 */
+	public $Rel;
+
+	/**
+	 * @var string
+	 */
+	public $Type;
+
+	/**
+	 * @var string
+	 */
+	public $Link;
 
 }
 
 class FileMetadata {
 
-    public $DisplayName; // String
-    public $DisplayOrder; // Integer
-    public $Description; // String
-    public $Signers; // Map of <String,FormSets>
-    public $FormSets; // Map of <String,Map of <String,FormSetField>>
+	/**
+	 * @var string
+	 */
+	public $DisplayName;
+
+	/**
+	 * @var integer
+	 */
+	public $DisplayOrder;
+
+	/**
+	 * @var string
+	 */
+	public $Description;
+
+	/**
+	 * @var <string,FormSets>[]
+	 */
+	public $Signers;
+
+	/**
+	 * @var <string,<string,FormSetField>>[]
+	 */
+	public $FormSets;
 
     function __construct(
 	    $displayName = null,
@@ -487,7 +707,10 @@ class FileMetadata {
 
 class FormSets {
 
-    public $FormSets; // Array of String
+	/**
+	 * @var string[]
+	 */
+	public $FormSets;
 
     function __construct($formSets) {
 	$this->FormSets = $formSets;
@@ -497,9 +720,20 @@ class FormSets {
 
 class FormSetField {
 
-    public $Type; // String (enum)
-    public $Value; // String
-    public $Location; // Location
+    /**
+	 * @var string
+	 */
+	public $Type;
+
+	/**
+	 * @var string
+	 */
+	public $Value;
+
+	/**
+	 * @var Location
+	 */
+	public $Location;
 
     function __construct($type, $location, $value = null) {
 	$this->Type = $type;
@@ -511,15 +745,50 @@ class FormSetField {
 
 class Location {
 
-    public $Search; // String
-    public $Occurence; // Integer
-    public $Top; // Integer
-    public $Right; // Integer
-    public $Bottom; // Integer
-    public $Left; // Integer
-    public $Width; // Integer
-    public $Height; // Integer
-    public $PageNumber; // Integer
+	/**
+	 * @var string
+	 */
+	public $Search;
+
+	/**
+	 * @var integer
+	 */
+	public $Occurence;
+
+	/**
+	 * @var integer
+	 */
+	public $Top;
+
+	/**
+	 * @var integer
+	 */
+	public $Right;
+
+	/**
+	 * @var integer
+	 */
+	public $Bottom;
+
+	/**
+	 * @var integer;
+	 */
+	public $Left;
+
+	/**
+	 * @var integer
+	 */
+	public $Width;
+
+	/**
+	 * @var integer
+	 */
+	public $Height;
+
+	/**
+	 * @var integer
+	 */
+	public $PageNumber;
 
     function __construct(
 	    $search = null,
