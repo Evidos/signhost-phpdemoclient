@@ -142,7 +142,13 @@ class SignHost {
     }
 
     public function ValidateChecksum($masterTransactionId, $fileId, $status, $checksum) {
-	return sha1($masterTransactionId."|".$fileId."|".$status."|".$this->SharedSecret) == $checksum;
+		$masterTransactionId."|".$fileId."|".$status."|".$this->SharedSecret;
+
+		if (strlen($SharedSecret) !== strlen($checksum)) {
+			return false;
+		}
+
+		return hash_equals($checksum, $SharedSecret);
     }
 
 }
