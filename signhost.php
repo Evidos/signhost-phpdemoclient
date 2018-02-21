@@ -141,14 +141,14 @@ class SignHost {
 	// Returns binary stream
     }
 
-    public function ValidateChecksum($masterTransactionId, $fileId, $status, $checksum) {
-		$masterTransactionId."|".$fileId."|".$status."|".$this->SharedSecret;
+    public function ValidateChecksum($masterTransactionId, $fileId, $status, $remoteChecksum) {
+		$localChecksum = sha1($masterTransactionId."|".$fileId."|".$status."|".$this->SharedSecret);
 
-		if (strlen($SharedSecret) !== strlen($checksum)) {
+		if (strlen($localChecksum) !== strlen($remoteChecksum)) {
 			return false;
 		}
 
-		return hash_equals($checksum, $SharedSecret);
+		return hash_equals($localChecksum, $remoteChecksum);
     }
 
 }
