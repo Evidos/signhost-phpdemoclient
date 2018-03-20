@@ -16,6 +16,8 @@ class SignHost {
 
     public function CreateTransaction($transaction) {
 	$ch = curl_init(self::API_URL."/transaction");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($transaction));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -32,6 +34,8 @@ class SignHost {
 
     public function GetTransaction($transactionId) {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -46,6 +50,8 @@ class SignHost {
 
     public function DeleteTransaction($transactionId) {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
@@ -61,6 +67,8 @@ class SignHost {
 
     public function StartTransaction($transactionId) {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId."/start");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
 	curl_setopt($ch, CURLOPT_PUT, 1);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
@@ -78,6 +86,8 @@ class SignHost {
 	$checksum_file = base64_encode(pack('H*', hash_file('sha256', $filePath)));
 	$fh = fopen($filePath, 'r');
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId."/file/".rawurlencode($fileId));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
 	curl_setopt($ch, CURLOPT_PUT, 1);
 	curl_setopt($ch, CURLOPT_INFILE, $fh);
 	curl_setopt($ch, CURLOPT_INFILESIZE, filesize($filePath));
@@ -97,6 +107,8 @@ class SignHost {
 
     public function AddOrReplaceMetadata($transactionId, $fileId, $metadata) {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId."/file/".rawurlencode($fileId));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
@@ -113,6 +125,8 @@ class SignHost {
 
     public function GetReceipt($transactionId) {
 	$ch = curl_init(self::API_URL."/file/receipt/".$transactionId);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -128,6 +142,8 @@ class SignHost {
 
     public function GetDocument($transactionId, $fileId) {
 	$ch = curl_init(self::API_URL."/transaction/".$transactionId."/file/".rawurlencode($fileId));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
