@@ -202,6 +202,7 @@ class Signer {
     public $RequireDigidVerification; // Boolean
     public $RequireKennisnetVerification; // Boolean
     public $RequireSurfnetVerification; // Boolean
+    public $Authentications; // Array of Verification
     public $Verifications; // Array of Verification
     public $SendSignRequest; // Boolean
     public $SignRequestMessage; // String
@@ -226,6 +227,7 @@ class Signer {
 	    $requireDigidVerification = false,
 	    $requireKennisnetVerification = false,
 	    $requireSurfnetVerification = false,
+	    $authentications = array(),
 	    $verifications = array(),
 	    $sendSignRequest = false,
 	    $signRequestMessage = null,
@@ -247,6 +249,7 @@ class Signer {
 	$this->RequireDigidVerification = $requireDigidVerification;
 	$this->RequireKennisnetVerification = $requireKennisnetVerification;
 	$this->RequireSurfnetVerification = $requireSurfnetVerification;
+	$this->Authentications = $authentications;
 	$this->Verifications = $verifications;
 	$this->SendSignRequest = $sendSignRequest;
 	$this->SendSignRequestMessage = $signRequestMessage;
