@@ -35,7 +35,6 @@ class SignHost {
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
 	    "Authorization: APIKey ".$this->ApiKey
 	));
@@ -50,7 +49,6 @@ class SignHost {
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
 	    "Authorization: APIKey ".$this->ApiKey
 	));
@@ -65,7 +63,6 @@ class SignHost {
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
 	    "Authorization: APIKey ".$this->ApiKey
 	));
@@ -116,7 +113,6 @@ class SignHost {
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
 	    "Authorization: APIKey ".$this->ApiKey
 	));
@@ -131,7 +127,6 @@ class SignHost {
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-	    "Content-Type: application/json",
 	    "Application: APPKey ".$this->AppKey,
 	    "Authorization: APIKey ".$this->ApiKey
 	));
