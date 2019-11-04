@@ -24,6 +24,8 @@ class SignHost {
 		));
 
 		$responseJson = curl_exec($ch);
+		curl_close($ch);
+
 		return json_decode($responseJson);
 	}
 
@@ -36,6 +38,8 @@ class SignHost {
 		));
 
 		$responseJson = curl_exec($ch);
+		curl_close($ch);
+
 		return json_decode($responseJson);
 	}
 
@@ -49,6 +53,7 @@ class SignHost {
 		));
 
 		$response = curl_exec($ch);
+		curl_close($ch);
 		return $response;
 	}
 
@@ -62,6 +67,8 @@ class SignHost {
 		));
 
 		$responseJson = curl_exec($ch);
+		curl_close($ch);
+
 		return json_decode($responseJson);
 	}
 
@@ -81,7 +88,9 @@ class SignHost {
 		));
 
 		$response = curl_exec($ch);
+		curl_close($ch);
 		fclose($fh);
+
 		return $response;
 	}
 
@@ -97,6 +106,8 @@ class SignHost {
 		));
 
 		$response = curl_exec($ch);
+		curl_close($ch);
+
 		return $response;
 	}
 
@@ -109,6 +120,8 @@ class SignHost {
 		));
 
 		$response = curl_exec($ch);
+		curl_close($ch);
+
 		// Returns binary stream
 		return $response;
 	}
@@ -122,6 +135,8 @@ class SignHost {
 		));
 
 		$response = curl_exec($ch);
+		curl_close($ch);
+
 		// Returns binary stream
 		return $response;
 	}
