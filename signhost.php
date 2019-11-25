@@ -1,19 +1,24 @@
 <?php
 class SignHost {
-	const API_URL = "https://api.signhost.com/api";
-
 	public $AppKey;
 	public $ApiKey;
 	public $SharedSecret;
+	public $ApiEndpoint;
 
-	function __construct($appKey, $apiKey, $sharedSecret = null) {
+	function __construct(
+		$appKey,
+		$apiKey,
+		$sharedSecret = null,
+		$apiEndpoint  = "https://api.signhost.com/api"
+	) {
 		$this->AppKey       = $appKey;
 		$this->ApiKey       = $apiKey;
 		$this->SharedSecret = $sharedSecret;
+		$this->ApiEndpoint  = $apiEndpoint;
 	}
 
 	public function CreateTransaction($transaction) {
-		$ch = curl_init(self::API_URL."/transaction");
+		$ch = curl_init($this->ApiEndpoint."/transaction");
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($transaction));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -30,7 +35,7 @@ class SignHost {
 	}
 
 	public function GetTransaction($transactionId) {
-		$ch = curl_init(self::API_URL."/transaction/".$transactionId);
+		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Application: APPKey ".$this->AppKey,
@@ -44,7 +49,7 @@ class SignHost {
 	}
 
 	public function DeleteTransaction($transactionId) {
-		$ch = curl_init(self::API_URL."/transaction/".$transactionId);
+		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -58,7 +63,7 @@ class SignHost {
 	}
 
 	public function StartTransaction($transactionId) {
-		$ch = curl_init(self::API_URL."/transaction/".$transactionId."/start");
+		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/start");
 		curl_setopt($ch, CURLOPT_PUT, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -75,7 +80,7 @@ class SignHost {
 	public function AddOrReplaceFile($transactionId, $fileId, $filePath) {
 		$checksum_file = base64_encode(pack('H*', hash_file('sha256', $filePath)));
 		$fh = fopen($filePath, 'r');
-		$ch = curl_init(self::API_URL."/transaction/".$transactionId."/file/".rawurlencode($fileId));
+		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/file/".rawurlencode($fileId));
 		curl_setopt($ch, CURLOPT_PUT, 1);
 		curl_setopt($ch, CURLOPT_INFILE, $fh);
 		curl_setopt($ch, CURLOPT_INFILESIZE, filesize($filePath));
@@ -95,7 +100,7 @@ class SignHost {
 	}
 
 	public function AddOrReplaceMetadata($transactionId, $fileId, $metadata) {
-		$ch = curl_init(self::API_URL."/transaction/".$transactionId."/file/".rawurlencode($fileId));
+		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/file/".rawurlencode($fileId));
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($metadata));
@@ -112,7 +117,7 @@ class SignHost {
 	}
 
 	public function GetReceipt($transactionId) {
-		$ch = curl_init(self::API_URL."/file/receipt/".$transactionId);
+		$ch = curl_init($this->ApiEndpoint."/file/receipt/".$transactionId);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Application: APPKey ".$this->AppKey,
@@ -127,7 +132,7 @@ class SignHost {
 	}
 
 	public function GetDocument($transactionId, $fileId) {
-		$ch = curl_init(self::API_URL."/transaction/".$transactionId."/file/".rawurlencode($fileId));
+		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/file/".rawurlencode($fileId));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Application: APPKey ".$this->AppKey,
