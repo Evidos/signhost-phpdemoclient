@@ -1,5 +1,7 @@
 <?php
 class SignHost {
+	const API_VERSION = "v1";
+
 	public $AppKey;
 	public $ApiKey;
 	public $SharedSecret;
@@ -23,6 +25,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($transaction));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
 			"Content-Type: application/json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
@@ -38,6 +41,7 @@ class SignHost {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -53,6 +57,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -67,6 +72,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_PUT, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -86,6 +92,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_INFILESIZE, filesize($filePath));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
 			"Content-Type: application/pdf",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
@@ -105,6 +112,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($metadata));
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
 			"Content-Type: application/json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
@@ -120,6 +128,9 @@ class SignHost {
 		$ch = curl_init($this->ApiEndpoint."/file/receipt/".$transactionId);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Accept: ".
+				"application/pdf, ".
+				"application/vnd.signhost.".self::API_VERSION."+json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -135,6 +146,9 @@ class SignHost {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/file/".rawurlencode($fileId));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Accept: ".
+				"application/pdf, ".
+				"application/vnd.signhost.".self::API_VERSION."+json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -208,6 +222,7 @@ class Transaction implements JsonSerializable {
 class Signer implements JsonSerializable {
 	public $Id; // String
 	public $Email; // String
+	public $Authentications; // Array of Verification
 	public $Verifications; // Array of Verification
 	public $SendSignRequest; // Boolean
 	public $SignRequestMessage; // String
@@ -223,6 +238,7 @@ class Signer implements JsonSerializable {
 	function __construct(
 		$email,
 		$id                   = null,
+		$authentications      = array(),
 		$verifications        = array(),
 		$sendSignRequest      = false,
 		$signRequestMessage   = null,
@@ -237,6 +253,7 @@ class Signer implements JsonSerializable {
 	) {
 		$this->Id                   = $id;
 		$this->Email                = $email;
+		$this->Authentications      = $authentications;
 		$this->Verifications        = $verifications;
 		$this->SendSignRequest      = $sendSignRequest;
 		$this->SignRequestMessage   = $signRequestMessage;
@@ -254,6 +271,7 @@ class Signer implements JsonSerializable {
 		return array_filter(array(
 			"Id"                   => $this->Id,
 			"Email"                => $this->Email,
+			"Authentications"      => $this->Authentications,
 			"Verifications"        => $this->Verifications,
 			"SendSignRequest"      => $this->SendSignRequest,
 			"SignRequestMessage"   => $this->SignRequestMessage,
