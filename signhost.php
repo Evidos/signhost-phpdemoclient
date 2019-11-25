@@ -2,11 +2,24 @@
 class SignHost {
 	const API_VERSION = "v1";
 
+	/** @var string */
 	public $AppKey;
+
+	/** @var string */
 	public $ApiKey;
+
+	/** @var string */
 	public $SharedSecret;
+
+	/** @var string */
 	public $ApiEndpoint;
 
+	/**
+	 * @param string $appKey
+	 * @param string $apiKey
+	 * @param string $sharedSecret
+	 * @param string $apiEndpoint
+	 */
 	function __construct(
 		$appKey,
 		$apiKey,
@@ -19,6 +32,11 @@ class SignHost {
 		$this->ApiEndpoint  = $apiEndpoint;
 	}
 
+	/**
+	 * Creates a new transaction.
+	 * @param Transaction $transaction
+	 * @return object
+	 */
 	public function CreateTransaction($transaction) {
 		$ch = curl_init($this->ApiEndpoint."/transaction");
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -37,6 +55,14 @@ class SignHost {
 		return json_decode($responseJson);
 	}
 
+	/**
+	 * Gets an exisiting transaction by providing a transaction ID.
+	 *
+	 * When the response has a status code of 410, you can still retrieve
+	 * partial historical data from the JSON in the error message property.
+	 * @param string $transactionId
+	 * @return object
+	 */
 	public function GetTransaction($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -52,6 +78,11 @@ class SignHost {
 		return json_decode($responseJson);
 	}
 
+	/**
+	 * Deletes an exisiting transaction by providing a transaction ID.
+	 * @param string $transactionId
+	 * @return object
+	 */
 	public function DeleteTransaction($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
@@ -67,6 +98,11 @@ class SignHost {
 		return $response;
 	}
 
+	/**
+	 * Starts an exisiting transaction by providing a transaction ID.
+	 * @param string $transactionId
+	 * @return object
+	 */
 	public function StartTransaction($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/start");
 		curl_setopt($ch, CURLOPT_PUT, 1);
@@ -83,6 +119,14 @@ class SignHost {
 		return json_decode($responseJson);
 	}
 
+	/**
+	 * Add a file to an existing transaction by providing a file path
+	 * and a transaction ID.
+	 * @param string $transactionId
+	 * @param string $fileId
+	 * @param string $filePath
+	 * @return object
+	 */
 	public function AddOrReplaceFile($transactionId, $fileId, $filePath) {
 		$checksum_file = base64_encode(pack('H*', hash_file('sha256', $filePath)));
 		$fh = fopen($filePath, 'r');
@@ -106,6 +150,13 @@ class SignHost {
 		return $response;
 	}
 
+	/**
+	 * Adds file metadata for a file to an existing transaction by providing a transaction ID.
+	 * @param string       $transactionId
+	 * @param string       $fileId
+	 * @param FileMetadata $metadata
+	 * @return object
+	 */
 	public function AddOrReplaceMetadata($transactionId, $fileId, $metadata) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/file/".rawurlencode($fileId));
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
@@ -124,6 +175,11 @@ class SignHost {
 		return $response;
 	}
 
+	/**
+	 * Gets the receipt of a finished transaction by providing a transaction ID.
+	 * @param string $transactionId
+	 * @return object
+	 */
 	public function GetReceipt($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/file/receipt/".$transactionId);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -138,10 +194,15 @@ class SignHost {
 		$response = curl_exec($ch);
 		curl_close($ch);
 
-		// Returns binary stream
 		return $response;
 	}
 
+	/**
+	 * Gets the document of a transaction by providing a transaction ID.
+	 * @param string $transactionId
+	 * @param string $fileId
+	 * @return object
+	 */
 	public function GetDocument($transactionId, $fileId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/file/".rawurlencode($fileId));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -156,10 +217,17 @@ class SignHost {
 		$response = curl_exec($ch);
 		curl_close($ch);
 
-		// Returns binary stream
 		return $response;
 	}
 
+	/**
+	 * Generates a checksum and validates it with the remote checksum.
+	 * @param string $masterTransactionId
+	 * @param string $fileId
+	 * @param int    $status
+	 * @param string $remoteChecksum
+	 * @return bool
+	 */
 	public function ValidateChecksum($masterTransactionId, $fileId, $status, $remoteChecksum) {
 		$localChecksum = sha1($masterTransactionId."|".$fileId."|".$status."|".$this->SharedSecret);
 
@@ -172,16 +240,44 @@ class SignHost {
 }
 
 class Transaction implements JsonSerializable {
-	public $Seal; // Boolean
-	public $Signers; // Array of Signer
-	public $Receivers; // Array of Receiver
-	public $Reference; // String
-	public $PostbackUrl; // String
-	public $SignRequestMode; // Integer
-	public $DaysToExpire; // Integer
-	public $SendEmailNotifications; // Boolean
-	public $Context; // Any object
+	/** @var bool */
+	public $Seal;
 
+	/** @var Signer[] */
+	public $Signers;
+
+	/** @var Receiver[] */
+	public $Receivers;
+
+	/** @var string */
+	public $Reference;
+
+	/** @var string */
+	public $PostbackUrl;
+
+	/** @var int */
+	public $SignRequestMode;
+
+	/** @var int */
+	public $DaysToExpire;
+
+	/** @var bool */
+	public $SendEmailNotifications;
+
+	/** @var object */
+	public $Context;
+
+	/**
+	 * @param bool       $seal
+	 * @param Signer[]   $signers
+	 * @param Receiver[] $receivers
+	 * @param string     $reference
+	 * @param string     $postbackUrl
+	 * @param int        $signRequestMode
+	 * @param bool       $daysToExpire
+	 * @param bool       $sendEmailNotifications
+	 * @param object     $context
+	 */
 	function __construct(
 		$seal                   = false,
 		$signers                = array(),
@@ -220,21 +316,64 @@ class Transaction implements JsonSerializable {
 }
 
 class Signer implements JsonSerializable {
-	public $Id; // String
-	public $Email; // String
-	public $Authentications; // Array of Verification
-	public $Verifications; // Array of Verification
-	public $SendSignRequest; // Boolean
-	public $SignRequestMessage; // String
-	public $SendSignConfirmation; // Boolean
-	public $Language; // String (enum)
-	public $ScribbleName; // String
-	public $DaysToRemind; // Integer
-	public $Expires; // String
-	public $Reference; // String
-	public $ReturnUrl; // String
-	public $Context; // Any object
+	/** @var string */
+	public $Id;
 
+	/** @var string */
+	public $Email;
+
+	/** @var Verification[] */
+	public $Authentications;
+
+	/** @var Verification[] */
+	public $Verifications;
+
+	/** @var bool */
+	public $SendSignRequest;
+
+	/** @var string */
+	public $SignRequestMessage;
+
+	/** @var bool */
+	public $SendSignConfirmation;
+
+	/** @var string */
+	public $Language;
+
+	/** @var string */
+	public $ScribbleName;
+
+	/** @var int */
+	public $DaysToRemind;
+
+	/** @var string */
+	public $Expires;
+
+	/** @var string */
+	public $Reference;
+
+	/** @var string */
+	public $ReturnUrl;
+
+	/** @var object */
+	public $Context;
+
+	/**
+	 * @param string         $email
+	 * @param string         $id
+	 * @param Verification[] $authentications
+	 * @param Verification[] $verifications
+	 * @param bool           $sendSignRequest
+	 * @param string         $signRequestMessage
+	 * @param bool           $sendSignConfirmation
+	 * @param string         $language
+	 * @param string         $scribbleName
+	 * @param int            $daysToRemind
+	 * @param string         $expires
+	 * @param string         $reference
+	 * @param string         $returnUrl
+	 * @param object         $context
+	 */
 	function __construct(
 		$email,
 		$id                   = null,
@@ -288,13 +427,32 @@ class Signer implements JsonSerializable {
 }
 
 class Receiver implements JsonSerializable {
-	public $Name; // String
-	public $Email; // String
-	public $Language; // String (enum)
-	public $Message; // String
-	public $Reference; // String
-	public $Context; // Any object
+	/** @var string */
+	public $Name;
 
+	/** @var string */
+	public $Email;
+
+	/** @var string */
+	public $Language;
+
+	/** @var string */
+	public $Message;
+
+	/** @var string */
+	public $Reference;
+
+	/** @var object */
+	public $Context;
+
+	/**
+	 * @param string $name
+	 * @param string $email
+	 * @param string $message
+	 * @param string $language
+	 * @param string $reference
+	 * @param object $context
+	 */
 	function __construct(
 		$name,
 		$email,
@@ -324,16 +482,24 @@ class Receiver implements JsonSerializable {
 }
 
 abstract class Verification {
-	public $Type; // String (enum)
+	/** @var string */
+	public $Type;
 
+	/**
+	 * @param string $type
+	 */
 	function __construct($type) {
 		$this->Type = $type;
 	}
 }
 
 class IDealVerification extends Verification implements JsonSerializable {
-	public $Iban; // String
+	/** @var string */
+	public $Iban;
 
+	/**
+	 * @param string $iban
+	 */
 	function __construct($iban = null) {
 		parent::__construct("iDeal");
 		$this->Iban = $iban;
@@ -360,8 +526,12 @@ class IDinVerification extends Verification implements JsonSerializable {
 }
 
 class DigiDVerification extends Verification implements JsonSerializable {
-	public $Bsn; // String
+	/** @var string */
+	public $Bsn;
 
+	/**
+	 * @param string $bsn
+	 */
 	function __construct($bsn = null) {
 		parent::__construct("DigiD");
 		$this->Bsn = $bsn;
@@ -388,10 +558,20 @@ class SurfnetVerification extends Verification implements JsonSerializable {
 }
 
 class ScribbleVerification extends Verification implements JsonSerializable {
-	public $RequireHandsignature; // Bool
-	public $ScribbleNameFixed; // Bool
-	public $ScribbleName; // String
+	/** @var bool */
+	public $RequireHandsignature;
 
+	/** @var bool */
+	public $ScribbleNameFixed;
+
+	/** @var string */
+	public $ScribbleName;
+
+	/**
+	 * @param bool   $requireHandsignature
+	 * @param bool   $scribbleNameFixed
+	 * @param string $scribbleName
+	 */
 	function __construct(
 		$requireHandsignature = false,
 		$scribbleNameFixed    = false,
@@ -414,8 +594,12 @@ class ScribbleVerification extends Verification implements JsonSerializable {
 }
 
 class PhoneNumberVerification extends Verification implements JsonSerializable {
-	public $Number; // String
+	/** @var string */
+	public $Number;
 
+	/**
+	 * @param string $number
+	 */
 	function __construct($number) {
 		parent::__construct("PhoneNumber");
 		$this->Number = $number;
@@ -442,8 +626,12 @@ class ConsentVerification extends Verification implements JsonSerializable {
 }
 
 class EherkenningVerification extends Verification implements JsonSerializable {
+	/** @var string */
 	public $EntityConcernIdKvkNr;
 
+	/**
+	 * @param string $entityConcernIdKvkNr
+	 */
 	function __construct($entityConcernIdKvkNr = null) {
 		parent::__construct("eHerkenning");
 		$this->EntityConcernIdKvkNr = $entityConcernIdKvkNr;
@@ -482,8 +670,12 @@ class SigningCertificateVerification extends Verification implements JsonSeriali
 }
 
 class ItsmeIdentificationVerification extends Verification implements JsonSerializable {
+	/** @var string */
 	public $PhoneNumber;
 
+	/**
+	 * @param string $phoneNumber
+	 */
 	function __construct($phoneNumber) {
 		parent::__construct("itsme Identification");
 		$this->PhoneNumber = $phoneNumber;
@@ -510,12 +702,28 @@ class ItsmeSignVerification extends Verification implements JsonSerializable {
 }
 
 class FileMetadata implements JsonSerializable {
-	public $DisplayName; // String
-	public $DisplayOrder; // Integer
-	public $Description; // String
-	public $Signers; // Map of <String,FormSets>
-	public $FormSets; // Map of <String,Map of <String,FormSetField>>
+	/** @var string */
+	public $DisplayName;
 
+	/** @var int */
+	public $DisplayOrder;
+
+	/** @var string */
+	public $Description;
+
+	/** @var FormSets[string] */
+	public $Signers;
+
+	/** @var FormSetField[string][string] */
+	public $FormSets;
+
+	/**
+	 * @param string                       $displayName
+	 * @param int                          $displayOrder
+	 * @param string                       $description
+	 * @param FormSets[string]             $signers
+	 * @param FormSetField[string][string] $formSets
+	 */
 	function __construct(
 		$displayName  = null,
 		$displayOrder = null,
@@ -542,8 +750,12 @@ class FileMetadata implements JsonSerializable {
 }
 
 class FormSets implements JsonSerializable {
-	public $FormSets; // Array of String
+	/** @var string[] */
+	public $FormSets;
 
+	/**
+	 * @param string[] $formSets
+	 */
 	function __construct($formSets) {
 		$this->FormSets = $formSets;
 	}
@@ -556,10 +768,20 @@ class FormSets implements JsonSerializable {
 }
 
 class FormSetField implements JsonSerializable {
-	public $Type; // String (enum)
-	public $Value; // String
-	public $Location; // Location
+	/** @var string */
+	public $Type;
 
+	/** @var string */
+	public $Value;
+
+	/** @var Location */
+	public $Location;
+
+	/**
+	 * @param string   $type
+	 * @param string   $value
+	 * @param Location $location
+	 */
 	function __construct($type, $location, $value = null) {
 		$this->Type     = $type;
 		$this->Location = $location;
@@ -576,16 +798,44 @@ class FormSetField implements JsonSerializable {
 }
 
 class Location implements JsonSerializable {
-	public $Search; // String
-	public $Occurence; // Integer
-	public $Top; // Integer
-	public $Right; // Integer
-	public $Bottom; // Integer
-	public $Left; // Integer
-	public $Width; // Integer
-	public $Height; // Integer
-	public $PageNumber; // Integer
+	/** @var string */
+	public $Search;
 
+	/** @var int */
+	public $Occurence;
+
+	/** @var int */
+	public $Top;
+
+	/** @var int */
+	public $Right;
+
+	/** @var int */
+	public $Bottom;
+
+	/** @var int */
+	public $Left;
+
+	/** @var int */
+	public $Width;
+
+	/** @var int */
+	public $Height;
+
+	/** @var int */
+	public $PageNumber;
+
+	/**
+	 * @param string $search
+	 * @param int    $occurence
+	 * @param int    $top
+	 * @param int    $right
+	 * @param int    $bottom
+	 * @param int    $left
+	 * @param int    $width
+	 * @param int    $height
+	 * @param int    $pageNumber
+	 */
 	function __construct(
 		$search     = null,
 		$occurence  = null,
