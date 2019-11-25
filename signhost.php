@@ -337,7 +337,7 @@ class Receiver implements JsonSerializable {
 	}
 }
 
-class Verification {
+abstract class Verification {
 	public $Type; // String (enum)
 
 	function __construct($type) {
