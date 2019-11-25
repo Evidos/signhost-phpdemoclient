@@ -373,6 +373,156 @@ class IDinVerification extends Verification implements JsonSerializable {
 	}
 }
 
+class DigiDVerification extends Verification implements JsonSerializable {
+	public $Bsn; // String
+
+	function __construct($bsn = null) {
+		parent::__construct("DigiD");
+		$this->Bsn = $bsn;
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type" => $this->Type,
+			"Bsn"  => $this->Bsn,
+		));
+	}
+}
+
+class SurfnetVerification extends Verification implements JsonSerializable {
+	function __construct() {
+		parent::__construct("SURFnet");
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type" => $this->Type,
+		));
+	}
+}
+
+class ScribbleVerification extends Verification implements JsonSerializable {
+	public $RequireHandsignature; // Bool
+	public $ScribbleNameFixed; // Bool
+	public $ScribbleName; // String
+
+	function __construct(
+		$requireHandsignature = false,
+		$scribbleNameFixed    = false,
+		$scribbleName         = null
+	) {
+		parent::__construct("Scribble");
+		$this->RequireHandsignature = $requireHandsignature;
+		$this->ScribbleNameFixed    = $scribbleNameFixed;
+		$this->ScribbleName         = $scribbleName;
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type"                 => $this->Type,
+			"RequireHandsignature" => $this->RequireHandsignature,
+			"ScribbleNameFixed"    => $this->ScribbleNameFixed,
+			"ScribbleName"         => $this->ScribbleName,
+		));
+	}
+}
+
+class PhoneNumberVerification extends Verification implements JsonSerializable {
+	public $Number; // String
+
+	function __construct($number) {
+		parent::__construct("PhoneNumber");
+		$this->Number = $number;
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type"   => $this->Type,
+			"Number" => $this->Number,
+		));
+	}
+}
+
+class ConsentVerification extends Verification implements JsonSerializable {
+	function __construct() {
+		parent::__construct("Consent");
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type" => $this->Type,
+		));
+	}
+}
+
+class EherkenningVerification extends Verification implements JsonSerializable {
+	public $EntityConcernIdKvkNr;
+
+	function __construct($entityConcernIdKvkNr = null) {
+		parent::__construct("eHerkenning");
+		$this->EntityConcernIdKvkNr = $entityConcernIdKvkNr;
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type"                 => $this->Type,
+			"EntityConcernIdKvkNr" => $this->EntityConcernIdKvkNr,
+		));
+	}
+}
+
+class EidasLoginVerification extends Verification implements JsonSerializable {
+	function __construct() {
+		parent::__construct("eIDAS Login");
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type" => $this->Type,
+		));
+	}
+}
+
+class SigningCertificateVerification extends Verification implements JsonSerializable {
+	function __construct() {
+		parent::__construct("SigningCertificate");
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type" => $this->Type,
+		));
+	}
+}
+
+class ItsmeIdentificationVerification extends Verification implements JsonSerializable {
+	public $PhoneNumber;
+
+	function __construct($phoneNumber) {
+		parent::__construct("itsme Identification");
+		$this->PhoneNumber = $phoneNumber;
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type"        => $this->Type,
+			"PhoneNumber" => $this->PhoneNumber,
+		));
+	}
+}
+
+class ItsmeSignVerification extends Verification implements JsonSerializable {
+	function __construct() {
+		parent::__construct("itsme sign");
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type" => $this->Type,
+		));
+	}
+}
+
 class FileMetadata implements JsonSerializable {
 	public $DisplayName; // String
 	public $DisplayOrder; // Integer
