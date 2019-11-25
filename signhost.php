@@ -25,7 +25,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Content-Type: application/json",
 			"Application: APPKey ".$this->AppKey,
-			"Authorization: APIKey ".$this->ApiKey
+			"Authorization: APIKey ".$this->ApiKey,
 		));
 
 		$responseJson = curl_exec($ch);
@@ -39,7 +39,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Application: APPKey ".$this->AppKey,
-			"Authorization: APIKey ".$this->ApiKey
+			"Authorization: APIKey ".$this->ApiKey,
 		));
 
 		$responseJson = curl_exec($ch);
@@ -54,7 +54,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Application: APPKey ".$this->AppKey,
-			"Authorization: APIKey ".$this->ApiKey
+			"Authorization: APIKey ".$this->ApiKey,
 		));
 
 		$response = curl_exec($ch);
@@ -68,7 +68,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Application: APPKey ".$this->AppKey,
-			"Authorization: APIKey ".$this->ApiKey
+			"Authorization: APIKey ".$this->ApiKey,
 		));
 
 		$responseJson = curl_exec($ch);
@@ -89,7 +89,7 @@ class SignHost {
 			"Content-Type: application/pdf",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
-			"Digest: SHA256=".$checksum_file
+			"Digest: SHA256=".$checksum_file,
 		));
 
 		$response = curl_exec($ch);
@@ -107,7 +107,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Content-Type: application/json",
 			"Application: APPKey ".$this->AppKey,
-			"Authorization: APIKey ".$this->ApiKey
+			"Authorization: APIKey ".$this->ApiKey,
 		));
 
 		$response = curl_exec($ch);
@@ -121,7 +121,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Application: APPKey ".$this->AppKey,
-			"Authorization: APIKey ".$this->ApiKey
+			"Authorization: APIKey ".$this->ApiKey,
 		));
 
 		$response = curl_exec($ch);
@@ -136,7 +136,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Application: APPKey ".$this->AppKey,
-			"Authorization: APIKey ".$this->ApiKey
+			"Authorization: APIKey ".$this->ApiKey,
 		));
 
 		$response = curl_exec($ch);
