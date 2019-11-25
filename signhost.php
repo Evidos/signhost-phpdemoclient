@@ -345,11 +345,11 @@ abstract class Verification {
 	}
 }
 
-class iDEAL extends Verification implements JsonSerializable {
+class IDealVerification extends Verification implements JsonSerializable {
 	public $Iban; // String
 
-	function __construct($type, $iban = null) {
-		parent::__construct($type);
+	function __construct($iban = null) {
+		parent::__construct("iDeal");
 		$this->Iban = $iban;
 	}
 
@@ -361,9 +361,9 @@ class iDEAL extends Verification implements JsonSerializable {
 	}
 }
 
-class iDIN extends Verification implements JsonSerializable {
-	function __construct($type) {
-		parent::__construct($type);
+class IDinVerification extends Verification implements JsonSerializable {
+	function __construct() {
+		parent::__construct("iDIN");
 	}
 
 	function jsonSerialize() {
