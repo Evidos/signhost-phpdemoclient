@@ -208,20 +208,12 @@ class Transaction implements JsonSerializable {
 class Signer implements JsonSerializable {
 	public $Id; // String
 	public $Email; // String
-	public $Mobile; // String
-	public $BSN; // String
-	public $RequireScribble; // Boolean
-	public $RequireSmsVerification; // Boolean
-	public $RequireDigidVerification; // Boolean
-	public $RequireKennisnetVerification; // Boolean
-	public $RequireSurfnetVerification; // Boolean
 	public $Verifications; // Array of Verification
 	public $SendSignRequest; // Boolean
 	public $SignRequestMessage; // String
 	public $SendSignConfirmation; // Boolean
 	public $Language; // String (enum)
 	public $ScribbleName; // String
-	public $ScribbleNameFixed; // Boolean
 	public $DaysToRemind; // Integer
 	public $Expires; // String
 	public $Reference; // String
@@ -230,73 +222,49 @@ class Signer implements JsonSerializable {
 
 	function __construct(
 		$email,
-		$id                           = null,
-		$mobile                       = null,
-		$bsn                          = null,
-		$requireScribble              = false,
-		$requireSmsVerification       = false,
-		$requireDigidVerification     = false,
-		$requireKennisnetVerification = false,
-		$requireSurfnetVerification   = false,
-		$verifications                = array(),
-		$sendSignRequest              = false,
-		$signRequestMessage           = null,
-		$sendSignConfirmation         = null,
-		$language                     = "nl-NL",
-		$scribbleName                 = null,
-		$scribbleNameFixed            = false,
-		$daysToRemind                 = 7,
-		$expires                      = null,
-		$reference                    = null,
-		$returnUrl                    = "https://signhost.com",
-		$context                      = null
+		$id                   = null,
+		$verifications        = array(),
+		$sendSignRequest      = false,
+		$signRequestMessage   = null,
+		$sendSignConfirmation = null,
+		$language             = "nl-NL",
+		$scribbleName         = null,
+		$daysToRemind         = 7,
+		$expires              = null,
+		$reference            = null,
+		$returnUrl            = "https://signhost.com",
+		$context              = null
 	) {
-		$this->Id                           = $id;
-		$this->Email                        = $email;
-		$this->Mobile                       = $mobile;
-		$this->BSN                          = $bsn;
-		$this->RequireScribble              = $requireScribble;
-		$this->RequireSmsVerification       = $requireSmsVerification;
-		$this->RequireDigidVerification     = $requireDigidVerification;
-		$this->RequireKennisnetVerification = $requireKennisnetVerification;
-		$this->RequireSurfnetVerification   = $requireSurfnetVerification;
-		$this->Verifications                = $verifications;
-		$this->SendSignRequest              = $sendSignRequest;
-		$this->SignRequestMessage           = $signRequestMessage;
-		$this->SendSignConfirmation         = $sendSignConfirmation;
-		$this->Language                     = $language;
-		$this->ScribbleName                 = $scribbleName;
-		$this->ScribbleNameFixed            = $scribbleNameFixed;
-		$this->DaysToRemind                 = $daysToRemind;
-		$this->Expires                      = $expires;
-		$this->Reference                    = $reference;
-		$this->ReturnUrl                    = $returnUrl;
-		$this->Context                      = $context;
+		$this->Id                   = $id;
+		$this->Email                = $email;
+		$this->Verifications        = $verifications;
+		$this->SendSignRequest      = $sendSignRequest;
+		$this->SignRequestMessage   = $signRequestMessage;
+		$this->SendSignConfirmation = $sendSignConfirmation;
+		$this->Language             = $language;
+		$this->ScribbleName         = $scribbleName;
+		$this->DaysToRemind         = $daysToRemind;
+		$this->Expires              = $expires;
+		$this->Reference            = $reference;
+		$this->ReturnUrl            = $returnUrl;
+		$this->Context              = $context;
 	}
 
 	function jsonSerialize() {
 		return array_filter(array(
-			"Id"                           => $this->Id,
-			"Email"                        => $this->Email,
-			"Mobile"                       => $this->Mobile,
-			"BSN"                          => $this->BSN,
-			"RequireScribble"              => $this->RequireScribble,
-			"RequireSmsVerification"       => $this->RequireSmsVerification,
-			"RequireDigidVerification"     => $this->RequireDigidVerification,
-			"RequireKennisnetVerification" => $this->RequireKennisnetVerification,
-			"RequireSurfnetVerification"   => $this->RequireSurfnetVerification,
-			"Verifications"                => $this->Verifications,
-			"SendSignRequest"              => $this->SendSignRequest,
-			"SignRequestMessage"           => $this->SignRequestMessage,
-			"SendSignConfirmation"         => $this->SendSignConfirmation,
-			"Language"                     => $this->Language,
-			"ScribbleName"                 => $this->ScribbleName,
-			"ScribbleNameFixed"            => $this->ScribbleNameFixed,
-			"DaysToRemind"                 => $this->DaysToRemind,
-			"Expires"                      => $this->Expires,
-			"Reference"                    => $this->Reference,
-			"ReturnUrl"                    => $this->ReturnUrl,
-			"Context"                      => $this->Context,
+			"Id"                   => $this->Id,
+			"Email"                => $this->Email,
+			"Verifications"        => $this->Verifications,
+			"SendSignRequest"      => $this->SendSignRequest,
+			"SignRequestMessage"   => $this->SignRequestMessage,
+			"SendSignConfirmation" => $this->SendSignConfirmation,
+			"Language"             => $this->Language,
+			"ScribbleName"         => $this->ScribbleName,
+			"DaysToRemind"         => $this->DaysToRemind,
+			"Expires"              => $this->Expires,
+			"Reference"            => $this->Reference,
+			"ReturnUrl"            => $this->ReturnUrl,
+			"Context"              => $this->Context,
 		));
 	}
 }
