@@ -157,9 +157,7 @@ class SignHost {
 	}
 }
 
-class Transaction {
-	public $Id; // String
-	public $Files; // Map of <String,FileEntry>
+class Transaction implements JsonSerializable {
 	public $Seal; // Boolean
 	public $Signers; // Array of Signer
 	public $Receivers; // Array of Receiver
@@ -168,7 +166,6 @@ class Transaction {
 	public $SignRequestMode; // Integer
 	public $DaysToExpire; // Integer
 	public $SendEmailNotifications; // Boolean
-	public $Status; // Integer (enum)
 	public $Context; // Any object
 
 	function __construct(
@@ -192,9 +189,23 @@ class Transaction {
 		$this->SendEmailNotifications = $sendEmailNotifications;
 		$this->Context                = $context;
 	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Seal"                   => $this->Seal,
+			"Signers"                => $this->Signers,
+			"Receivers"              => $this->Receivers,
+			"Reference"              => $this->Reference,
+			"PostbackUrl"            => $this->PostbackUrl,
+			"SignRequestMode"        => $this->SignRequestMode,
+			"DaysToExpire"           => $this->DaysToExpire,
+			"SendEmailNotifications" => $this->SendEmailNotifications,
+			"Context"                => $this->Context,
+		));
+	}
 }
 
-class Signer {
+class Signer implements JsonSerializable {
 	public $Id; // String
 	public $Email; // String
 	public $Mobile; // String
@@ -215,7 +226,6 @@ class Signer {
 	public $Expires; // String
 	public $Reference; // String
 	public $ReturnUrl; // String
-	public $Activities; // Array of Activity
 	public $Context; // Any object
 
 	function __construct(
@@ -252,7 +262,7 @@ class Signer {
 		$this->RequireSurfnetVerification   = $requireSurfnetVerification;
 		$this->Verifications                = $verifications;
 		$this->SendSignRequest              = $sendSignRequest;
-		$this->SendSignRequestMessage       = $signRequestMessage;
+		$this->SignRequestMessage           = $signRequestMessage;
 		$this->SendSignConfirmation         = $sendSignConfirmation;
 		$this->Language                     = $language;
 		$this->ScribbleName                 = $scribbleName;
@@ -263,9 +273,35 @@ class Signer {
 		$this->ReturnUrl                    = $returnUrl;
 		$this->Context                      = $context;
 	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Id"                           => $this->Id,
+			"Email"                        => $this->Email,
+			"Mobile"                       => $this->Mobile,
+			"BSN"                          => $this->BSN,
+			"RequireScribble"              => $this->RequireScribble,
+			"RequireSmsVerification"       => $this->RequireSmsVerification,
+			"RequireDigidVerification"     => $this->RequireDigidVerification,
+			"RequireKennisnetVerification" => $this->RequireKennisnetVerification,
+			"RequireSurfnetVerification"   => $this->RequireSurfnetVerification,
+			"Verifications"                => $this->Verifications,
+			"SendSignRequest"              => $this->SendSignRequest,
+			"SignRequestMessage"           => $this->SignRequestMessage,
+			"SendSignConfirmation"         => $this->SendSignConfirmation,
+			"Language"                     => $this->Language,
+			"ScribbleName"                 => $this->ScribbleName,
+			"ScribbleNameFixed"            => $this->ScribbleNameFixed,
+			"DaysToRemind"                 => $this->DaysToRemind,
+			"Expires"                      => $this->Expires,
+			"Reference"                    => $this->Reference,
+			"ReturnUrl"                    => $this->ReturnUrl,
+			"Context"                      => $this->Context,
+		));
+	}
 }
 
-class Receiver {
+class Receiver implements JsonSerializable {
 	public $Name; // String
 	public $Email; // String
 	public $Language; // String (enum)
@@ -288,6 +324,17 @@ class Receiver {
 		$this->Reference = $reference;
 		$this->Context   = $context;
 	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Name"      => $this->Name,
+			"Email"     => $this->Email,
+			"Language"  => $this->Language,
+			"Message"   => $this->Message,
+			"Reference" => $this->Reference,
+			"Context"   => $this->Context,
+		));
+	}
 }
 
 class Verification {
@@ -298,47 +345,35 @@ class Verification {
 	}
 }
 
-class iDEAL extends Verification {
+class iDEAL extends Verification implements JsonSerializable {
 	public $Iban; // String
-	public $AccountHolderName; // String
-	public $AccountHolderCity; // String
 
 	function __construct($type, $iban = null) {
 		parent::__construct($type);
 		$this->Iban = $iban;
 	}
-}
 
-class iDIN extends Verification {
-	public $AccountHolderName; // String
-	public $AccountHolderAddress1; // String
-	public $AccountHolderAddress2; // String
-	public $AccountHolderDateOfBirth; // String
-
-	function __construct($type) {
-		parent::__construct($type);
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type" => $this->Type,
+			"Iban" => $this->Iban,
+		));
 	}
 }
 
-class Activity {
-	public $Id; // String
-	public $Code; // Integer (enum)
-	public $Info; // String
-	public $CreatedDateTime; // String
+class iDIN extends Verification implements JsonSerializable {
+	function __construct($type) {
+		parent::__construct($type);
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type" => $this->Type,
+		));
+	}
 }
 
-class FileEntry {
-	public $Links; // Array of Link
-	public $DisplayName; // String
-}
-
-class Link {
-	public $Rel; // String (enum)
-	public $Type; // String
-	public $Link; // String
-}
-
-class FileMetadata {
+class FileMetadata implements JsonSerializable {
 	public $DisplayName; // String
 	public $DisplayOrder; // Integer
 	public $Description; // String
@@ -358,17 +393,33 @@ class FileMetadata {
 		$this->Signers      = $signers;
 		$this->FormSets     = $formSets;
 	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"DisplayName"  => $this->DisplayName,
+			"DisplayOrder" => $this->DisplayOrder,
+			"Description"  => $this->Description,
+			"Signers"      => $this->Signers,
+			"FormSets"     => $this->FormSets,
+		));
+	}
 }
 
-class FormSets {
+class FormSets implements JsonSerializable {
 	public $FormSets; // Array of String
 
 	function __construct($formSets) {
 		$this->FormSets = $formSets;
 	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"FormSets" => $this->FormSets,
+		));
+	}
 }
 
-class FormSetField {
+class FormSetField implements JsonSerializable {
 	public $Type; // String (enum)
 	public $Value; // String
 	public $Location; // Location
@@ -378,9 +429,17 @@ class FormSetField {
 		$this->Location = $location;
 		$this->Value    = $value;
 	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Type"     => $this->Type,
+			"Value"    => $this->Value,
+			"Location" => $this->Location,
+		));
+	}
 }
 
-class Location {
+class Location implements JsonSerializable {
 	public $Search; // String
 	public $Occurence; // Integer
 	public $Top; // Integer
@@ -411,5 +470,19 @@ class Location {
 		$this->Width      = $width;
 		$this->Height     = $height;
 		$this->PageNumber = $pageNumber;
+	}
+
+	function jsonSerialize() {
+		return array_filter(array(
+			"Search"     => $this->Search,
+			"Occurence"  => $this->Occurence,
+			"Top"        => $this->Top,
+			"Right"      => $this->Right,
+			"Bottom"     => $this->Bottom,
+			"Left"       => $this->Left,
+			"Width"      => $this->Width,
+			"Height"     => $this->Height,
+			"PageNumber" => $this->PageNumber,
+		));
 	}
 }
