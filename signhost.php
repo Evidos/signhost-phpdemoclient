@@ -23,6 +23,7 @@ require_once("DTO/verification.php");
 
 class SignHost {
 	const API_VERSION = "v1";
+	const CLIENT_VERSION = "2.0-beta";
 
 	/** @var string */
 	public $AppKey;
@@ -66,6 +67,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
+			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Content-Type: application/json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
@@ -90,6 +92,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
+			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -111,6 +114,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
+			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -132,6 +136,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
+			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -160,6 +165,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
+			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Content-Type: application/pdf",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
@@ -187,6 +193,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($metadata));
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
+			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Content-Type: application/json",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
@@ -210,6 +217,7 @@ class SignHost {
 			"Accept: ".
 				"application/pdf, ".
 				"application/vnd.signhost.".self::API_VERSION."+json",
+			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
@@ -233,6 +241,7 @@ class SignHost {
 			"Accept: ".
 				"application/pdf, ".
 				"application/vnd.signhost.".self::API_VERSION."+json",
+			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
 		));
