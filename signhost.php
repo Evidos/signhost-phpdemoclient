@@ -35,7 +35,7 @@ class SignHost {
 	/**
 	 * Creates a new transaction.
 	 * @param Transaction $transaction
-	 * @return object
+	 * @return Response
 	 */
 	public function CreateTransaction($transaction) {
 		$ch = curl_init($this->ApiEndpoint."/transaction");
@@ -49,10 +49,10 @@ class SignHost {
 			"Authorization: APIKey ".$this->ApiKey,
 		));
 
-		$responseJson = curl_exec($ch);
+		$response = new Response($ch);
 		curl_close($ch);
 
-		return json_decode($responseJson);
+		return $response;
 	}
 
 	/**
@@ -61,7 +61,7 @@ class SignHost {
 	 * When the response has a status code of 410, you can still retrieve
 	 * partial historical data from the JSON in the error message property.
 	 * @param string $transactionId
-	 * @return object
+	 * @return Response
 	 */
 	public function GetTransaction($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId);
@@ -72,16 +72,16 @@ class SignHost {
 			"Authorization: APIKey ".$this->ApiKey,
 		));
 
-		$responseJson = curl_exec($ch);
+		$response = new Response($ch);
 		curl_close($ch);
 
-		return json_decode($responseJson);
+		return $response;
 	}
 
 	/**
 	 * Deletes an exisiting transaction by providing a transaction ID.
 	 * @param string $transactionId
-	 * @return object
+	 * @return Response
 	 */
 	public function DeleteTransaction($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId);
@@ -93,15 +93,16 @@ class SignHost {
 			"Authorization: APIKey ".$this->ApiKey,
 		));
 
-		$response = curl_exec($ch);
+		$response = new Response($ch);
 		curl_close($ch);
+
 		return $response;
 	}
 
 	/**
 	 * Starts an exisiting transaction by providing a transaction ID.
 	 * @param string $transactionId
-	 * @return object
+	 * @return Response
 	 */
 	public function StartTransaction($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/start");
@@ -113,10 +114,10 @@ class SignHost {
 			"Authorization: APIKey ".$this->ApiKey,
 		));
 
-		$responseJson = curl_exec($ch);
+		$response = new Response($ch);
 		curl_close($ch);
 
-		return json_decode($responseJson);
+		return $response;
 	}
 
 	/**
@@ -125,7 +126,7 @@ class SignHost {
 	 * @param string $transactionId
 	 * @param string $fileId
 	 * @param string $filePath
-	 * @return object
+	 * @return Response
 	 */
 	public function AddOrReplaceFile($transactionId, $fileId, $filePath) {
 		$checksum_file = base64_encode(pack('H*', hash_file('sha256', $filePath)));
@@ -143,7 +144,7 @@ class SignHost {
 			"Digest: SHA256=".$checksum_file,
 		));
 
-		$response = curl_exec($ch);
+		$response = new Response($ch);
 		curl_close($ch);
 		fclose($fh);
 
@@ -155,7 +156,7 @@ class SignHost {
 	 * @param string       $transactionId
 	 * @param string       $fileId
 	 * @param FileMetadata $metadata
-	 * @return object
+	 * @return Response
 	 */
 	public function AddOrReplaceMetadata($transactionId, $fileId, $metadata) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/file/".rawurlencode($fileId));
@@ -169,7 +170,7 @@ class SignHost {
 			"Authorization: APIKey ".$this->ApiKey,
 		));
 
-		$response = curl_exec($ch);
+		$response = new Response($ch);
 		curl_close($ch);
 
 		return $response;
@@ -178,7 +179,7 @@ class SignHost {
 	/**
 	 * Gets the receipt of a finished transaction by providing a transaction ID.
 	 * @param string $transactionId
-	 * @return object
+	 * @return Response
 	 */
 	public function GetReceipt($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/file/receipt/".$transactionId);
@@ -191,7 +192,7 @@ class SignHost {
 			"Authorization: APIKey ".$this->ApiKey,
 		));
 
-		$response = curl_exec($ch);
+		$response = new Response($ch);
 		curl_close($ch);
 
 		return $response;
@@ -201,7 +202,7 @@ class SignHost {
 	 * Gets the document of a transaction by providing a transaction ID.
 	 * @param string $transactionId
 	 * @param string $fileId
-	 * @return object
+	 * @return Response
 	 */
 	public function GetDocument($transactionId, $fileId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/file/".rawurlencode($fileId));
@@ -214,7 +215,7 @@ class SignHost {
 			"Authorization: APIKey ".$this->ApiKey,
 		));
 
-		$response = curl_exec($ch);
+		$response = new Response($ch);
 		curl_close($ch);
 
 		return $response;
@@ -236,6 +237,62 @@ class SignHost {
 		}
 
 		return hash_equals($localChecksum, $remoteChecksum);
+	}
+}
+
+class Response
+{
+	/** @var bool */
+	public $IsSuccess;
+
+	/** @var int */
+	public $StatusCode;
+
+	/** @var object */
+	public $Content;
+
+	/** @var string */
+	public $ErrorMessage;
+
+	/**
+	 * @param object $ch An unclosed cURL resource.
+	 */
+	function __construct($ch) {
+		$response = curl_exec($ch);
+		$this->StatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+		if ($response === false) {
+			$this->IsSuccess = false;
+			$this->ErrorMessage = curl_error($ch);
+		}
+		else {
+			$this->IsSuccess =
+				$this->StatusCode >= 200 &&
+				$this->StatusCode < 300;
+
+			if ($this->IsSuccess) {
+				$this->Content = $response;
+			}
+			else {
+				$this->ErrorMessage = GetErrorMessage($response);
+			}
+		}
+	}
+
+	private function GetErrorMessage($response) {
+		if (!is_string($response)) {
+			return "An unknown error occured.";
+		}
+
+		$error = json_decode($response);
+		if (
+			json_last_error() == JSON_ERROR_NONE &&
+			property_exists($error, "Message")
+		) {
+			return $error->Message;
+		}
+
+		return $response;
 	}
 }
 
