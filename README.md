@@ -5,27 +5,34 @@ You will need a valid APPKey and APIKey.
 You can request a APPKey for signhost at [ondertekenen.nl](https://www.ondertekenen.nl/api-proefversie/).
 
 ```php
+<?php
 require_once("signhost.php");
 
 $client = new SignHost("AppName appkey", "apikey");
 
-$transaction = $client->CreateTransaction(CreateSampleTransaction());
+$createResponse = $client->CreateTransaction(CreateSampleTransaction());
+if ($createResponse->IsSuccess) {
+	$transaction = json_decode($create->Content);
 
-$client->AddOrReplaceFile($transaction->Id, "First Document", "PathToFile");
-$client->AddOrReplaceFile($transaction->Id, "General Agreement", "PathOtherFile");
+	$client->AddOrReplaceFile($transaction->Id, "First Document", "PathToFile");
+	$client->AddOrReplaceFile($transaction->Id, "General Agreement", "PathOtherFile");
 
-# When everything is setup we can start the transaction flow
-$client->StartTransaction($transaction->Id);
+	# When everything is setup we can start the transaction flow
+	$client->StartTransaction($transaction->Id);
+}
 
 function CreateSampleTransaction() {
-    $signer = new Signer("john.doe@example.com");	    
-    $signer->ScribbleName = "John Doe";
-    $signer->SignRequestMessage = "Could you please sign this document?";
-    $signer->SendSignRequest = true;
+	$scribbleVerification = new ScribbleVerification();
+	$scribbleVerification->ScribbleName = "John Doe";
 
-    $transaction = new Transaction();
-    $transaction->Signers[] = $signer;
+	$signer = new Signer("john.doe@example.com");
+	$signer->SignRequestMessage = "Could you please sign this document?";
+	$signer->SendSignRequest = true;
+	$signer->Verifications = array($scribbleVerification);
 
-    return $transaction;
+	$transaction = new Transaction();
+	$transaction->Signers = array($signer);
+
+	return $transaction;
 }
 ```
