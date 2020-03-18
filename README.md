@@ -12,7 +12,7 @@ $client = new SignHost("AppName appkey", "apikey");
 
 $createResponse = $client->CreateTransaction(CreateSampleTransaction());
 if ($createResponse->IsSuccess) {
-	$transaction = json_decode($create->Content);
+	$transaction = json_decode($createResponse->Content);
 
 	$client->AddOrReplaceFile($transaction->Id, "First Document", "PathToFile");
 	$client->AddOrReplaceFile($transaction->Id, "General Agreement", "PathOtherFile");
