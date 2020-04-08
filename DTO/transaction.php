@@ -46,7 +46,7 @@ class Transaction implements JsonSerializable {
 		$postbackUrl            = null,
 		$signRequestMode        = 2,
 		$daysToExpire           = 60,
-		$sendEmailNotifications = false,
+		$sendEmailNotifications = true,
 		$context                = null
 	) {
 		$this->Seal                   = $seal;
@@ -61,7 +61,7 @@ class Transaction implements JsonSerializable {
 	}
 
 	function jsonSerialize() {
-		return array_filter(array(
+		$filtered = array_filter(array(
 			"Seal"                   => $this->Seal,
 			"Signers"                => $this->Signers,
 			"Receivers"              => $this->Receivers,
@@ -69,8 +69,13 @@ class Transaction implements JsonSerializable {
 			"PostbackUrl"            => $this->PostbackUrl,
 			"SignRequestMode"        => $this->SignRequestMode,
 			"DaysToExpire"           => $this->DaysToExpire,
-			"SendEmailNotifications" => $this->SendEmailNotifications,
 			"Context"                => $this->Context,
 		));
+
+		if ($this->SendEmailNotifications === false) {
+			$filtered["SendEmailNotifications"] = $this->SendEmailNotifications;
+		}
+
+		return $filtered;
 	}
 }
