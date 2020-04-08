@@ -46,7 +46,7 @@ class Transaction implements JsonSerializable {
 		$postbackUrl            = null,
 		$signRequestMode        = 2,
 		$daysToExpire           = 60,
-		$sendEmailNotifications = false,
+		$sendEmailNotifications = true,
 		$context                = null
 	) {
 		$this->Seal                   = $seal;

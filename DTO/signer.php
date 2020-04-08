@@ -63,7 +63,7 @@ class Signer implements JsonSerializable {
 		$id                   = null,
 		$authentications      = array(),
 		$verifications        = array(),
-		$sendSignRequest      = false,
+		$sendSignRequest      = true,
 		$signRequestMessage   = null,
 		$sendSignConfirmation = null,
 		$language             = "nl-NL",
