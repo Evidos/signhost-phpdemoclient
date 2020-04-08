@@ -91,12 +91,11 @@ class Signer implements JsonSerializable {
 	}
 
 	function jsonSerialize() {
-		return array_filter(array(
+		$filtered = array_filter(array(
 			"Id"                   => $this->Id,
 			"Email"                => $this->Email,
 			"Authentications"      => $this->Authentications,
 			"Verifications"        => $this->Verifications,
-			"SendSignRequest"      => $this->SendSignRequest,
 			"SignRequestMessage"   => $this->SignRequestMessage,
 			"SendSignConfirmation" => $this->SendSignConfirmation,
 			"Language"             => $this->Language,
@@ -107,5 +106,11 @@ class Signer implements JsonSerializable {
 			"ReturnUrl"            => $this->ReturnUrl,
 			"Context"              => $this->Context,
 		));
+
+		if ($this->SendSignRequest === false) {
+			$filtered["SendSignRequest"] = $this->SendSignRequest;
+		}
+
+		return $filtered;
 	}
 }
