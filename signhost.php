@@ -113,6 +113,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Content-Length: 0",
 			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
 			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Application: APPKey ".$this->AppKey,
@@ -135,6 +136,7 @@ class SignHost {
 		curl_setopt($ch, CURLOPT_PUT, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			"Content-Length: 0",
 			"Accept: application/vnd.signhost.".self::API_VERSION."+json",
 			"User-Agent: Signhost PHP Client/".self::CLIENT_VERSION,
 			"Application: APPKey ".$this->AppKey,
