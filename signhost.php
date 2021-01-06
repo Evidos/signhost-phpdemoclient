@@ -133,7 +133,7 @@ class SignHost {
 	 */
 	public function StartTransaction($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/start");
-		curl_setopt($ch, CURLOPT_PUT, 1);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Content-Length: 0",
