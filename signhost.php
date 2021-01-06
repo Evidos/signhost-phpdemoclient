@@ -23,7 +23,7 @@ require_once("DTO/verification.php");
 
 class SignHost {
 	const API_VERSION = "v1";
-	const CLIENT_VERSION = "2.0-beta";
+	const CLIENT_VERSION = "2.0-beta-2";
 
 	/** @var string */
 	public $AppKey;
@@ -80,7 +80,7 @@ class SignHost {
 	}
 
 	/**
-	 * Gets an exisiting transaction by providing a transaction ID.
+	 * Gets an existing transaction by providing a transaction ID.
 	 *
 	 * When the response has a status code of 410, you can still retrieve
 	 * partial historical data from the JSON in the error message property.
@@ -104,7 +104,7 @@ class SignHost {
 	}
 
 	/**
-	 * Deletes an exisiting transaction by providing a transaction ID.
+	 * Deletes an existing transaction by providing a transaction ID.
 	 * @param string $transactionId
 	 * @return Response
 	 */
@@ -127,13 +127,13 @@ class SignHost {
 	}
 
 	/**
-	 * Starts an exisiting transaction by providing a transaction ID.
+	 * Starts an existing transaction by providing a transaction ID.
 	 * @param string $transactionId
 	 * @return Response
 	 */
 	public function StartTransaction($transactionId) {
 		$ch = curl_init($this->ApiEndpoint."/transaction/".$transactionId."/start");
-		curl_setopt($ch, CURLOPT_PUT, 1);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			"Content-Length: 0",
