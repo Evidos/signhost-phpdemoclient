@@ -80,7 +80,7 @@ class SignHost {
 	}
 
 	/**
-	 * Gets an exisiting transaction by providing a transaction ID.
+	 * Gets an existing transaction by providing a transaction ID.
 	 *
 	 * When the response has a status code of 410, you can still retrieve
 	 * partial historical data from the JSON in the error message property.
@@ -104,7 +104,7 @@ class SignHost {
 	}
 
 	/**
-	 * Deletes an exisiting transaction by providing a transaction ID.
+	 * Deletes an existing transaction by providing a transaction ID.
 	 * @param string $transactionId
 	 * @return Response
 	 */
@@ -127,7 +127,7 @@ class SignHost {
 	}
 
 	/**
-	 * Starts an exisiting transaction by providing a transaction ID.
+	 * Starts an existing transaction by providing a transaction ID.
 	 * @param string $transactionId
 	 * @return Response
 	 */
