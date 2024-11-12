@@ -171,7 +171,7 @@ class SignHost {
 			"Content-Type: application/pdf",
 			"Application: APPKey ".$this->AppKey,
 			"Authorization: APIKey ".$this->ApiKey,
-			"Digest: SHA256=".$checksum_file,
+			"Digest: SHA-256=".$checksum_file,
 		));
 
 		$response = new Response($ch);
