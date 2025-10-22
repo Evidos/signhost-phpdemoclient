@@ -7,7 +7,7 @@ class SigningCertificateVerification extends Verification implements JsonSeriali
 		parent::__construct("SigningCertificate");
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 		));

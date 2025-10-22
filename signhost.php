@@ -20,6 +20,9 @@ require_once("DTO/signingcertificateverification.php");
 require_once("DTO/surfnetverification.php");
 require_once("DTO/transaction.php");
 require_once("DTO/verification.php");
+require_once("DTO/cscqualifiedverification.php");
+require_once("DTO/openidprovidersverification.php");
+require_once("DTO/onfidoverification.php");
 
 class SignHost {
 	const API_VERSION = "v1";

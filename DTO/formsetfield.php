@@ -20,7 +20,7 @@ class FormSetField implements JsonSerializable {
 		$this->Value    = $value;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type"     => $this->Type,
 			"Value"    => $this->Value,

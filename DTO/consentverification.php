@@ -7,7 +7,7 @@ class ConsentVerification extends Verification implements JsonSerializable {
 		parent::__construct("Consent");
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 		));

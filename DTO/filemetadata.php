@@ -36,7 +36,7 @@ class FileMetadata implements JsonSerializable {
 		$this->FormSets     = $formSets;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"DisplayName"  => $this->DisplayName,
 			"DisplayOrder" => $this->DisplayOrder,

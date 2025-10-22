@@ -7,7 +7,7 @@ class EidasLoginVerification extends Verification implements JsonSerializable {
 		parent::__construct("eIDAS Login");
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 		));

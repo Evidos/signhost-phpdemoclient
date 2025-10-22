@@ -60,7 +60,7 @@ class Transaction implements JsonSerializable {
 		$this->Context                = $context;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		$filtered = array_filter(array(
 			"Seal"                   => $this->Seal,
 			"Signers"                => $this->Signers,

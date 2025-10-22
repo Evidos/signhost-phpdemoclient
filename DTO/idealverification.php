@@ -14,7 +14,7 @@ class IDealVerification extends Verification implements JsonSerializable {
 		$this->Iban = $iban;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 			"Iban" => $this->Iban,

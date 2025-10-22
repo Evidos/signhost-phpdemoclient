@@ -14,7 +14,7 @@ class DigiDVerification extends Verification implements JsonSerializable {
 		$this->Bsn = $bsn;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 			"Bsn"  => $this->Bsn,

@@ -14,7 +14,7 @@ class PhoneNumberVerification extends Verification implements JsonSerializable {
 		$this->Number = $number;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type"   => $this->Type,
 			"Number" => $this->Number,

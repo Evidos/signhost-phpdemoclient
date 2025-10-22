@@ -28,7 +28,7 @@ class ScribbleVerification extends Verification implements JsonSerializable {
 		$this->ScribbleName         = $scribbleName;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type"                 => $this->Type,
 			"RequireHandsignature" => $this->RequireHandsignature,

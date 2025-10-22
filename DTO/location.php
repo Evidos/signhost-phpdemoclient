@@ -60,7 +60,7 @@ class Location implements JsonSerializable {
 		$this->PageNumber = $pageNumber;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Search"     => $this->Search,
 			"Occurence"  => $this->Occurence,

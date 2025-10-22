@@ -2,12 +2,12 @@
 // Required due to inheritance.
 require_once("verification.php");
 
-class ItsmeSignVerification extends Verification implements JsonSerializable {
+class CSCQualifiedVerification extends Verification implements JsonSerializable {
 	function __construct() {
-		parent::__construct("itsme sign");
+		parent::__construct("CSC Qualified");
 	}
 
-	function jsonSerialize(): mixed {
+	function jsonSerialize() : mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 		));

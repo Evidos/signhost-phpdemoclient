@@ -7,7 +7,7 @@ class SurfnetVerification extends Verification implements JsonSerializable {
 		parent::__construct("SURFnet");
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 		));
