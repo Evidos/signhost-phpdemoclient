@@ -7,7 +7,7 @@ class IDinVerification extends Verification implements JsonSerializable {
 		parent::__construct("iDIN");
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 		));

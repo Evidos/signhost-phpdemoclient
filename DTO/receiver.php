@@ -42,7 +42,7 @@ class Receiver implements JsonSerializable {
 		$this->Context   = $context;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Name"      => $this->Name,
 			"Email"     => $this->Email,

@@ -90,7 +90,7 @@ class Signer implements JsonSerializable {
 		$this->Context              = $context;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		$filtered = array_filter(array(
 			"Id"                   => $this->Id,
 			"Email"                => $this->Email,

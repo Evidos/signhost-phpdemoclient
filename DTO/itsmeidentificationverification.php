@@ -14,7 +14,7 @@ class ItsmeIdentificationVerification extends Verification implements JsonSerial
 		$this->PhoneNumber = $phoneNumber;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type"        => $this->Type,
 			"PhoneNumber" => $this->PhoneNumber,

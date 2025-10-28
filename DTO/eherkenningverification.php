@@ -14,7 +14,7 @@ class EherkenningVerification extends Verification implements JsonSerializable {
 		$this->EntityConcernIdKvkNr = $entityConcernIdKvkNr;
 	}
 
-	function jsonSerialize() {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type"                 => $this->Type,
 			"EntityConcernIdKvkNr" => $this->EntityConcernIdKvkNr,
