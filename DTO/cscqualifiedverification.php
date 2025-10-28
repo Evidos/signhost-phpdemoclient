@@ -7,7 +7,7 @@ class CSCQualifiedVerification extends Verification implements JsonSerializable 
 		parent::__construct("CSC Qualified");
 	}
 
-	function jsonSerialize() : mixed {
+	function jsonSerialize(): mixed {
 		return array_filter(array(
 			"Type" => $this->Type,
 		));
