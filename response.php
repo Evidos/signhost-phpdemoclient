@@ -19,7 +19,7 @@ class Response
 	function __construct($ch) {
 		$response = curl_exec($ch);
 		$this->StatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->Url =curl_getinfo($ch,  CURLINFO_EFFECTIVE_URL );
+        $this->Url = curl_getinfo($ch,  CURLINFO_EFFECTIVE_URL );
         $this->Total_Time = curl_getinfo($ch,  CURLINFO_TOTAL_TIME );
 
 		if ($response === false) {
